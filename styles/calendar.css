@@ -1,0 +1,62 @@
+.ui.table thead th {
+  background: #e0e1e2;
+}
+
+.ui.table thead th.current {
+  background: #8caaff;
+  background-color: #8caaff;
+  color: white;
+  text-shadow: 1px 1px 1px black;
+}
+
+.ui.table td {
+  padding: 0;
+  height: 41px;
+}
+
+.ui.table td.current {
+  background: #8caaff;
+  background-color: #8caaff;
+}
+
+.prev.link,
+.next.link {
+  cursor: pointer;
+}
+
+.presentation {
+  position: relative;
+  height: inherit;
+}
+
+.urok {
+  width: 100%;
+  position: absolute !important;
+  top: 0;
+  left: 0;
+}
+
+.icons {
+  display: inline-block;
+  margin-left: 10px;
+}
+
+div[data-minutes="00"] > div {
+  top: 0;
+}
+
+div[data-minutes="15"] > div {
+  top: 25%;
+}
+
+div[data-minutes="30"] > div {
+  top: 50%;
+}
+
+div[data-minutes="45"] > div {
+  top: 75%;
+}
+
+.spinner-container {
+  position: relative;
+}

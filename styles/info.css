@@ -1,0 +1,10 @@
+#info-classes {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.info-classes-divider {
+  display: flex;
+  flex-direction: column;
+}

@@ -1,0 +1,10 @@
+.appLayout {
+  background-color: #fafafa;
+  height: 100vh;
+}
+
+.appContent {
+  padding-left: 300px;
+  padding-top: 100px;
+  padding-right: 100px;
+}

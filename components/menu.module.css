@@ -1,0 +1,24 @@
+.menu {
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+.menuItem {
+  padding-bottom: 10px;
+}
+
+.selected:hover {
+  cursor: pointer;
+  background-color: #e6e6e6;
+}
+
+.active {
+  font-weight: 800;
+}
+
+.vertical {
+  height: 100vh;
+  position: fixed;
+  padding-top: 35px;
+  background-color: rgb(255, 255, 255);
+}
