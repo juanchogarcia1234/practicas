@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/Image";
 import Head from "next/Head";
 import Layout from "../components/layout";
 import Calendar from "../components/calendar";
