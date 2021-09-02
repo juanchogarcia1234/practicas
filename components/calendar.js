@@ -121,7 +121,9 @@ class Calendar extends Component {
                     className="prev link"
                     onClick={() => {
                       this.setState({ currentWeek: this.genNextWeek("previous") }, () => {
-                        this.props.fetchClasses(this.state.currentWeek, this.props.token);
+                        {
+                          /* this.props.fetchClasses(this.state.currentWeek, this.props.token); */
+                        }
                       });
                     }}
                   >
@@ -131,7 +133,9 @@ class Calendar extends Component {
                     className="next link"
                     onClick={() => {
                       this.setState({ currentWeek: this.genNextWeek("next") }, () => {
-                        this.props.fetchClasses(this.state.currentWeek, this.props.token);
+                        {
+                          /* this.props.fetchClasses(this.state.currentWeek, this.props.token); */
+                        }
                       });
                     }}
                   >

@@ -1,10 +1,11 @@
-import Link from "next/link";
-import Image from "next/image";
 import Head from "next/head";
 import Layout from "../components/layout";
 import Calendar from "../components/calendar";
 
 export default function Home() {
+  fetch("/api/auth/login")
+    .then(response => response.json())
+    .then(data => console.log(data));
   return (
     <>
       <Layout>
