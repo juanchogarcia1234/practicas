@@ -1,6 +1,8 @@
 import styles from "./loginform.module.css";
+import axios from "axios";
 import Image from "next/image";
 import { useState } from "react";
+import { resolveHref } from "next/dist/next-server/lib/router/router";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -8,16 +10,12 @@ export default function LoginForm() {
 
   function submitFormHandler(event, email, password) {
     event.preventDefault();
-    const reqBody = { email, password };
-    fetch("/api/auth/login", {
-      method: "POST",
-      body: JSON.stringify(reqBody),
-      headers: {
-        "Content-Type": "application/json"
-      }
-    })
-      .then(response => response.json())
-      .then(data => console.log(data));
+    axios
+      .post("/api/auth/login", {
+        email,
+        password
+      })
+      .then(response => console.log(response));
   }
 
   return (
