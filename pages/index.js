@@ -1,11 +1,10 @@
 import Head from "next/head";
 import Layout from "../components/layout";
 import Calendar from "../components/calendar";
+import { useSession } from "next-auth/client";
 
 export default function Home() {
-  fetch("/api/auth/login")
-    .then(response => response.json())
-    .then(data => console.log(data));
+  const [session, loading] = useSession();
   return (
     <>
       <Layout>

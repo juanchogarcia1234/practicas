@@ -1,21 +1,27 @@
 import styles from "./loginform.module.css";
 import axios from "axios";
+import { signIn } from "next-auth/client";
 import Image from "next/image";
 import { useState } from "react";
 import { resolveHref } from "next/dist/next-server/lib/router/router";
+import { useRouter } from "next/router";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
 
-  function submitFormHandler(event, email, password) {
+  async function submitFormHandler(event, email, password) {
     event.preventDefault();
-    axios
-      .post("/api/auth/login", {
-        email,
-        password
-      })
-      .then(response => console.log(response));
+    const result = await signIn("credentials", {
+      callbackUrl: "http://localhost:3000/",
+      email,
+      password
+    });
+    //Refactor to redirect when signed in
+    // if (result.error === null) {
+    //   router.push("/");
+    // }
   }
 
   return (
