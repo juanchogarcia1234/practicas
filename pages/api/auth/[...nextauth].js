@@ -30,5 +30,10 @@ export default NextAuth({
         return { email: user.email };
       }
     })
-  ]
+  ],
+  callbacks: {
+    redirect({ url, baseUrl }) {
+      return url;
+    }
+  }
 });

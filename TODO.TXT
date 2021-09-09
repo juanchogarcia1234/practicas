@@ -1,0 +1,4 @@
+- CUSTOMIZAR EL CALLBACK PARA PERMITIR LAS URLS RELATIVAS DE REDIRECCION EN SIGNIN Y SIGNOUT
+  https://next-auth.js.org/getting-started/client#signout
+  https://next-auth.js.org/configuration/callbacks#redirect-callback
+- PONER UN SPINNER LOADING EN EL SIGN IN YA QUE TARDA MUCHO

@@ -6,7 +6,7 @@ export default function Header() {
   const router = useRouter();
 
   function logoutHandler() {
-    signOut().then(() => router.push("/login"));
+    signOut("credentials", { callbackUrl: "/login" });
   }
   return (
     <div className={`ui right menu ${styles.menu}`}>
