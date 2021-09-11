@@ -14,7 +14,6 @@ export default function LoginForm() {
   async function submitFormHandler(event, email, password) {
     event.preventDefault();
     const result = await signIn("credentials", {
-      callbackUrl: "http://localhost:3000/foo",
       email,
       password
     });
