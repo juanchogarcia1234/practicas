@@ -6,7 +6,7 @@ export default function Header() {
   const router = useRouter();
 
   function logoutHandler() {
-    signOut({ callbackUrl: "http://localhost:3000/login" });
+    signOut({ callbackUrl: "/login" });
   }
   return (
     <div className={`ui right menu ${styles.menu}`}>
