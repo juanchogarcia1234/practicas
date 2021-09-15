@@ -18,15 +18,19 @@ export default function LoginForm() {
     event.preventDefault();
     setLoading(true);
     const result = await signIn("credentials", {
+      redirect: false,
       email,
       password
     });
     console.log("esta funcion sigue activs", result);
 
-    // if (!result) {
-    //   console.log(errorMes);
-    //   errorMes.current.style.display = "block";
-    // }
+    if (result.error !== null) {
+      setLoading(false);
+      console.log(errorMes);
+      errorMes.current.style.display = "block";
+    } else {
+      router.push("/");
+    }
   }
 
   return (

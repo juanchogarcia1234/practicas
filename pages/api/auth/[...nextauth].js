@@ -18,11 +18,11 @@ export default NextAuth({
         const user = await usersCollection.findOne({ email: credentials.email });
 
         if (!user) {
-          throw "/login";
+          throw new Error("No user found");
         }
 
         if (credentials.password !== user.password) {
-          throw "/login";
+          throw new Error("Wrong password");
         }
 
         client.close();
