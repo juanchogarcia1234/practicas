@@ -18,12 +18,13 @@ export default NextAuth({
         const user = await usersCollection.findOne({ email: credentials.email });
 
         if (!user) {
-          throw new Error("No user found!");
+          throw "/login";
         }
 
         if (credentials.password !== user.password) {
-          throw new Error("Wrong password");
+          throw "/login";
         }
+
         client.close();
 
         //This object will be encoded in the JSON WEBTOKEN
