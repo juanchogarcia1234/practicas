@@ -1,10 +1,26 @@
 import Head from "next/head";
 import Layout from "../components/layout";
 import Calendar from "../components/calendar";
-import { useSession } from "next-auth/client";
+import { getSession } from "next-auth/client";
+import Spinner from "../components/spinner";
+import { useState, useEffect } from "react";
 
 export default function Home() {
-  const [session, loading] = useSession();
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    getSession().then(session => {
+      if (!session) {
+        window.location.href = "/login";
+      } else {
+        setIsLoading(false);
+      }
+    });
+  }, []);
+
+  if (isLoading) {
+    return <Spinner></Spinner>;
+  }
+
   return (
     <>
       <Layout>
