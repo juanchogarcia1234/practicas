@@ -36,7 +36,7 @@ export default function LoginForm() {
   return (
     <>
       {loading ? (
-        <Spinner></Spinner>
+        <Spinner text="Загружается..."></Spinner>
       ) : (
         <div className="ui middle aligned center aligned grid">
           <div className="column">

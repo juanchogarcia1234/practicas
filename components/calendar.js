@@ -5,8 +5,8 @@ import { ru } from "date-fns/locale";
 import { capitalize } from "underscore.string";
 import { formatDateFromDB, formatHour } from "../helpers";
 import Info from "./info";
-import Spinner from "./spinner";
 import { months, hours } from "../constants";
+import Spinner from "./spinner";
 
 class Calendar extends React.Component {
   state = {
@@ -14,7 +14,9 @@ class Calendar extends React.Component {
     currentYear: getYear(new Date()),
     currentDay: new Date(),
     currentWeek: this.getCurrentWeek(),
-    currentClasses: []
+    currentClasses: [],
+    loading: true,
+    classes: []
   };
 
   isOnlyOneMonth(week) {
@@ -46,6 +48,7 @@ class Calendar extends React.Component {
 
     // ...1st the current week 2nd the next week (next 7 days) and so on
     return function (direction) {
+      this.setState({ loading: true });
       if (direction === "next") {
         week = [...Array(7)].map((_, i) => addDays(addDays(currentWeekStart, 7), i));
         currentWeekStart = addDays(currentWeekStart, 7); //actualizo el current weekstart si ha dado a next
@@ -61,8 +64,11 @@ class Calendar extends React.Component {
   }
 
   checkClassInDay(hour, day, urok) {
-    if (formatDateFromDB(day) == formatDateFromDB(new Date(formatDateFromDB(urok.date))) && hour.substring(0, 2) == formatHour(urok.date).substring(0, 2)) {
-      return this.renderClass(formatHour(urok.date).substr(3, 2), urok);
+    console.log("hora", hour);
+    console.log("day", day);
+    console.log("clase", urok);
+    if (formatDateFromDB(day) == formatDateFromDB(new Date(formatDateFromDB(urok.start_time))) && hour.substring(0, 2) == formatHour(urok.start_time).substring(0, 2)) {
+      return this.renderClass(formatHour(urok.start_time).substr(3, 2), urok);
     } else {
       return null;
     }
@@ -95,9 +101,11 @@ class Calendar extends React.Component {
     );
   }
 
-  componentDidMount() {
-    const startDate = "2021-09-20";
-    const endDate = "2021-09-22";
+  fetchWeekClasses() {
+    const startDate = this.state.currentWeek[0];
+    const endDate = this.state.currentWeek[6];
+    endDate.setHours(23);
+    console.log("semana actual", this.state.currentWeek);
 
     // this.props.fetchClasses(this.state.currentWeek, this.props.token);
     axios
@@ -107,7 +115,15 @@ class Calendar extends React.Component {
           endDate
         }
       })
-      .then(response => console.log(response));
+      .then(response => {
+        console.log(response);
+        this.setState({ classes: response.data.classes });
+        this.setState({ loading: false });
+      });
+  }
+
+  componentDidMount() {
+    this.fetchWeekClasses();
     this.genNextWeek = this.takeWeek();
 
     //Para que necesito esto?
@@ -123,7 +139,8 @@ class Calendar extends React.Component {
     return (
       <>
         <Info />
-        <div className="spinner-container">
+        <div className="spinner-container" style={{ paddingBottom: "60px" }}>
+          {this.state.loading && <Spinner text="Загружаются уроки..." position="absolute" bg="transparent" />}
           <table className="ui celled center aligned unstackable table day eight column">
             <thead>
               <tr>
@@ -135,9 +152,7 @@ class Calendar extends React.Component {
                     className="prev link"
                     onClick={() => {
                       this.setState({ currentWeek: this.genNextWeek("previous") }, () => {
-                        {
-                          /* this.props.fetchClasses(this.state.currentWeek, this.props.token); */
-                        }
+                        this.fetchWeekClasses();
                       });
                     }}
                   >
@@ -147,9 +162,7 @@ class Calendar extends React.Component {
                     className="next link"
                     onClick={() => {
                       this.setState({ currentWeek: this.genNextWeek("next") }, () => {
-                        {
-                          /* this.props.fetchClasses(this.state.currentWeek, this.props.token); */
-                        }
+                        this.fetchWeekClasses();
                       });
                     }}
                   >
@@ -169,7 +182,7 @@ class Calendar extends React.Component {
                   {this.state.currentWeek.map(day => {
                     return (
                       <td key={day} id={day} className={format(day, "E d y") === format(this.state.currentDay, "E d y") ? "current" : ""}>
-                        {/* {this.props.classes.map(lesson => this.checkClassInDay(hour, day, lesson))} */}
+                        {this.state.classes.map(lesson => this.checkClassInDay(hour, day, lesson))}
                       </td>
                     );
                   })}
@@ -177,7 +190,6 @@ class Calendar extends React.Component {
               ))}
             </tbody>
           </table>
-          {this.props.dataStatus ? <Spinner /> : null}
         </div>
       </>
     );
