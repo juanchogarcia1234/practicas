@@ -1,4 +1,5 @@
-import React, { Component } from "react";
+import React from "react";
+import axios from "axios";
 import { startOfMonth, startOfWeek, endOfWeek, startOfDay, addDays, subDays, endOfYear, format, getMonth, getYear, getWeek } from "date-fns";
 import { ru } from "date-fns/locale";
 import { capitalize } from "underscore.string";
@@ -7,7 +8,7 @@ import Info from "./info";
 import Spinner from "./spinner";
 import { months, hours } from "../constants";
 
-class Calendar extends Component {
+class Calendar extends React.Component {
   state = {
     currentMonth: getMonth(new Date()),
     currentYear: getYear(new Date()),
@@ -95,17 +96,30 @@ class Calendar extends Component {
   }
 
   componentDidMount() {
-    // this.props.fetchClasses(this.state.currentWeek, this.props.token);
+    const startDate = "2021-09-20";
+    const endDate = "2021-09-22";
 
+    // this.props.fetchClasses(this.state.currentWeek, this.props.token);
+    axios
+      .get("/api/classes", {
+        params: {
+          startDate,
+          endDate
+        }
+      })
+      .then(response => console.log(response));
     this.genNextWeek = this.takeWeek();
+
     //Para que necesito esto?
     // this.setState({ currentWeek: this.genNextWeek() });
+
     //aqui hacer la llamada para obtener los datos
   }
 
   componentDidUpdate() {}
 
   render() {
+    console.log("propiedades", this.props);
     return (
       <>
         <Info />
