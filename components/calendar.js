@@ -88,9 +88,12 @@ class Calendar extends React.Component {
     console.log(urok);
     return (
       <div className="presentation" key={urok.date} data-minutes={startTime}>
-        <div className="ui raised  text  segment urok">
-          Урок {urok.class_number}/8
-          <div className="icons">
+        <div className="ui raised  text  segment urok" style={{ paddingTop: 0, position: "relative" }}>
+          {this.props.session.user.email === "juan@gmail.com" && <i className={`fas fa-ellipsis-v grey`} style={{ top: "5px", position: "absolute", right: "5px" }}></i>}
+          <div style={{ marginBottom: "-3px", marginTop: "3px", fontSize: "12px" }}>
+            {urok.student_name} {urok.number}/8
+          </div>
+          <div className="icons" style={{ fontSize: "11px" }}>
             <i className={`check icon ${urok.done ? "green" : "grey"}`}></i>
             <i className={`share icon ${urok.moved ? "blue" : "grey"}`}></i>
             <i className={`times close icon ${urok.cancelled ? "red" : "grey"}`}></i>
