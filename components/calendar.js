@@ -85,11 +85,10 @@ class Calendar extends React.Component {
   }
 
   renderClass(startTime, urok) {
-    console.log(urok);
     return (
       <div className="presentation" key={urok.date} data-minutes={startTime}>
         <div className="ui raised  text  segment urok" style={{ paddingTop: 0, position: "relative" }}>
-          {this.props.session.user.email === "juan@gmail.com" && <i className={`fas fa-ellipsis-v grey`} style={{ top: "5px", position: "absolute", right: "5px" }}></i>}
+          {this.props.session.user.email === "juan@gmail.com" && <i className={`fas fa-ellipsis-v grey`} style={{ top: "7px", position: "absolute", right: "5px" }}></i>}
           <div style={{ marginBottom: "-3px", marginTop: "3px", fontSize: "12px" }}>
             {urok.student_name} {urok.number}/8
           </div>

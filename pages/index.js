@@ -5,7 +5,7 @@ import { getSession, useSession } from "next-auth/client";
 import Spinner from "../components/spinner";
 import { useState, useEffect } from "react";
 
-export default function Home() {
+export default function Home({ sessionActiva }) {
   const [isLoading, setIsLoading] = useState(true);
   const [session, loading] = useSession();
   useEffect(() => {
@@ -19,15 +19,13 @@ export default function Home() {
     });
   }, []);
 
-  console.log("esta es la sesion", session);
-
   if (isLoading) {
     return <Spinner></Spinner>;
   }
 
   return (
     <>
-      <Layout>
+      <Layout session={sessionActiva} usuario={sessionActiva.user.email}>
         <Head>
           <title>Уроки</title>
           <link rel="icon" href="/favicon.ico" />
@@ -37,4 +35,13 @@ export default function Home() {
       </Layout>
     </>
   );
+}
+
+export async function getServerSideProps(context) {
+  const sessionActiva = await getSession({ req: context.req });
+  console.log("LLAMANDO A GETSERVERSIDEPROPS");
+  console.log(sessionActiva);
+  return {
+    props: { sessionActiva }
+  };
 }
