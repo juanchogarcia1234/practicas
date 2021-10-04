@@ -84,11 +84,31 @@ class Calendar extends React.Component {
     });
   }
 
+  shouldConfigBeVisible() {}
+
   renderClass(startTime, urok) {
     return (
       <div className="presentation" key={urok.date} data-minutes={startTime}>
         <div className="ui raised  text  segment urok" style={{ paddingTop: 0, position: "relative" }}>
-          {this.props.session.user.email === "juan@gmail.com" && <i className={`fas fa-ellipsis-v grey`} style={{ top: "7px", position: "absolute", right: "5px" }}></i>}
+          {this.props.session.user.email === "juan@gmail.com" && (
+            <>
+              <i
+                onClick={e => {
+                  e.target.nextSibling.style.display === "none" ? (e.target.nextSibling.style.display = "inline-flex") : (e.target.nextSibling.style.display = "none");
+                }}
+                className={`fas fa-ellipsis-v grey`}
+                style={{ top: "7px", position: "absolute", right: "5px", cursor: "pointer" }}
+              ></i>
+              <div class="ui compact segments" style={{ position: "absolute", right: "-65px", top: "-231%", display: "none" }}>
+                <div class="ui segment" style={{ padding: "10px", fontSize: "12px" }}>
+                  <p>Отменить</p>
+                </div>
+                <div class="ui segment" style={{ padding: "10px", fontSize: "12px" }}>
+                  <p>Перенести</p>
+                </div>
+              </div>
+            </>
+          )}
           <div style={{ marginBottom: "-3px", marginTop: "3px", fontSize: "12px" }}>
             {urok.student_name} {urok.number}/8
           </div>
