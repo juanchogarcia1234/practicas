@@ -107,6 +107,17 @@ class Calendar extends React.Component {
                   <p>Перенести</p>
                 </div>
               </div>
+              <div class="ui modal">
+                <div class="header">Header</div>
+                <div class="content">
+                  <p></p>
+                </div>
+                <div class="actions">
+                  <div class="ui approve button">Approve</div>
+                  <div class="ui button">Neutral</div>
+                  <div class="ui cancel button">Cancel</div>
+                </div>
+              </div>
             </>
           )}
           <div style={{ marginBottom: "-3px", marginTop: "3px", fontSize: "12px" }}>
@@ -161,6 +172,7 @@ class Calendar extends React.Component {
     return (
       <>
         <Info />
+        <h2 style={{ textAlign: "center", color: "#5a5a5a" }}>Московское время</h2>
         <div className="spinner-container" style={{ paddingBottom: "60px" }}>
           {this.state.loading && <Spinner text="Загружаются уроки..." position="absolute" bg="transparent" />}
           <table className="ui celled center aligned unstackable table day eight column">
@@ -218,8 +230,8 @@ class Calendar extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
-  return { token: state.token, classes: state.classes, dataStatus: state.dataStatus };
-};
+// const mapStateToProps = state => {
+//   return { token: state.token, classes: state.classes, dataStatus: state.dataStatus };
+// };
 
 export default Calendar;
