@@ -1,11 +1,12 @@
 import React from "react";
 import axios from "axios";
+import $ from "jquery";
 import { startOfMonth, startOfWeek, endOfWeek, startOfDay, addDays, subDays, endOfYear, format, getMonth, getYear, getWeek } from "date-fns";
 import { ru } from "date-fns/locale";
 import { capitalize } from "underscore.string";
 import { formatDateFromDB, formatHour } from "../helpers";
 import Info from "./info";
-import { months, hours } from "../constants";
+import { months, hours, currentTimePositions } from "../constants";
 import Spinner from "./spinner";
 
 class Calendar extends React.Component {
@@ -64,9 +65,6 @@ class Calendar extends React.Component {
   }
 
   checkClassInDay(hour, day, urok) {
-    console.log("hora", hour);
-    console.log("day", day);
-    console.log("clase", urok);
     if (formatDateFromDB(day) == formatDateFromDB(new Date(formatDateFromDB(urok.start_time))) && hour.substring(0, 2) == formatHour(urok.start_time).substring(0, 2)) {
       return this.renderClass(formatHour(urok.start_time).substr(3, 2), urok);
     } else {
@@ -88,7 +86,7 @@ class Calendar extends React.Component {
 
   renderClass(startTime, urok) {
     return (
-      <div className="presentation" key={urok.date} data-minutes={startTime}>
+      <div className="presentation" key={urok.start_time} data-minutes={startTime}>
         <div className="ui raised  text  segment urok" style={{ paddingTop: 0, position: "relative" }}>
           {this.props.session.user.email === "juan@gmail.com" && (
             <>
@@ -100,14 +98,14 @@ class Calendar extends React.Component {
                 style={{ top: "7px", position: "absolute", right: "5px", cursor: "pointer" }}
               ></i>
               <div class="ui compact segments" style={{ position: "absolute", right: "-65px", top: "-231%", display: "none" }}>
-                <div class="ui segment" style={{ padding: "10px", fontSize: "12px" }}>
+                <div class="ui segment" style={{ padding: "10px", fontSize: "12px" }} onClick={() => $(".ui .modal")}>
                   <p>Отменить</p>
                 </div>
                 <div class="ui segment" style={{ padding: "10px", fontSize: "12px" }}>
                   <p>Перенести</p>
                 </div>
               </div>
-              <div class="ui modal">
+              <div class={`ui modal`}>
                 <div class="header">Header</div>
                 <div class="content">
                   <p></p>
@@ -138,7 +136,6 @@ class Calendar extends React.Component {
     const startDate = this.state.currentWeek[0];
     const endDate = this.state.currentWeek[6];
     endDate.setHours(23);
-    console.log("semana actual", this.state.currentWeek);
 
     // this.props.fetchClasses(this.state.currentWeek, this.props.token);
     axios
@@ -168,7 +165,7 @@ class Calendar extends React.Component {
   componentDidUpdate() {}
 
   render() {
-    console.log("propiedades", this.props);
+    console.log("QUE HORA ES", this.state.currentDay.toString().substring(16, 20) + "0");
     return (
       <>
         <Info />
@@ -209,7 +206,8 @@ class Calendar extends React.Component {
                 {this.showCalendarHeader()}
               </tr>
             </thead>
-            <tbody>
+            <tbody style={{ position: "relative" }}>
+              <div style={{ backgroundColor: "red", height: "2px", width: "87.5%", right: 0, position: "absolute", top: currentTimePositions[this.state.currentDay.toString().substring(16, 20) + "0"] }}></div>
               {hours.map(hour => (
                 <tr key={hour} id={hour}>
                   <td>{hour}</td>
