@@ -1,6 +1,5 @@
 import React from "react";
 import axios from "axios";
-import $ from "jquery";
 import { startOfMonth, startOfWeek, endOfWeek, startOfDay, addDays, subDays, endOfYear, format, getMonth, getYear, getWeek } from "date-fns";
 import { ru } from "date-fns/locale";
 import { capitalize } from "underscore.string";
@@ -98,22 +97,30 @@ class Calendar extends React.Component {
                 style={{ top: "7px", position: "absolute", right: "5px", cursor: "pointer" }}
               ></i>
               <div class="ui compact segments" style={{ position: "absolute", right: "-65px", top: "-231%", display: "none" }}>
-                <div class="ui segment" style={{ padding: "10px", fontSize: "12px" }} onClick={() => $(".ui .modal")}>
+                <div
+                  class="ui segment"
+                  style={{ padding: "10px", fontSize: "12px" }}
+                  onClick={() => {
+                    $(".ui.modal.tiny").modal("show");
+                  }}
+                >
                   <p>Отменить</p>
                 </div>
                 <div class="ui segment" style={{ padding: "10px", fontSize: "12px" }}>
                   <p>Перенести</p>
                 </div>
               </div>
-              <div class={`ui modal`}>
-                <div class="header">Header</div>
+              <div class={`ui modal tiny`}>
+                <div class="header">Отменить урок</div>
                 <div class="content">
-                  <p></p>
+                  <p>Ты уверен что хочешь отменить урок?</p>
                 </div>
                 <div class="actions">
-                  <div class="ui approve button">Approve</div>
-                  <div class="ui button">Neutral</div>
-                  <div class="ui cancel button">Cancel</div>
+                  <div class="ui negative button">Нет</div>
+                  <div class="ui positive right labeled icon button">
+                    Да
+                    <i class="checkmark icon"></i>
+                  </div>
                 </div>
               </div>
             </>
@@ -165,7 +172,6 @@ class Calendar extends React.Component {
   componentDidUpdate() {}
 
   render() {
-    console.log("QUE HORA ES", this.state.currentDay.toString().substring(16, 20) + "0");
     return (
       <>
         <Info />
