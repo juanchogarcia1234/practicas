@@ -172,6 +172,9 @@ class Calendar extends React.Component {
   componentDidUpdate() {}
 
   render() {
+    console.log("dia de hoy", currentTimePositions[this.state.currentDay.toString().substring(16, 20) + "0"]);
+    console.log("dia de hoy sin current position", this.state.currentDay.toString().substring(16, 20) + "0");
+
     return (
       <>
         <Info />
