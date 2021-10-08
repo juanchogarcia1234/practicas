@@ -84,8 +84,9 @@ class Calendar extends React.Component {
   shouldConfigBeVisible() {}
 
   renderClass(startTime, urok) {
+    console.log("funciona o no", urok.start_time);
     return (
-      <div className="presentation" key={urok.start_time} data-minutes={startTime}>
+      <div className="presentation" key={urok.end_time} data-minutes={startTime}>
         <div className="ui raised  text  segment urok" style={{ paddingTop: 0, position: "relative" }}>
           {this.props.session.user.email === "juan@gmail.com" && (
             <>
@@ -99,27 +100,49 @@ class Calendar extends React.Component {
               <div class="ui compact segments" style={{ position: "absolute", right: "-65px", top: "-231%", display: "none" }}>
                 <div
                   class="ui segment"
-                  style={{ padding: "10px", fontSize: "12px" }}
+                  style={{ padding: "10px", fontSize: "12px", cursor: "pointer" }}
                   onClick={() => {
-                    $(".ui.modal.tiny").modal("show");
+                    $(`#${urok._id}`).modal("show");
                   }}
                 >
                   <p>Отменить</p>
                 </div>
-                <div class="ui segment" style={{ padding: "10px", fontSize: "12px" }}>
+                <div class="ui modal tiny" id={urok._id}>
+                  <div class="header">Отменить урок</div>
+                  <div class="content">
+                    <p>Ты уверен что хочешь отменить урок?</p>
+                  </div>
+                  <div class="actions">
+                    <div class="ui negative button">Нет</div>
+                    <div class="ui positive right labeled icon button">
+                      Да
+                      <i class="checkmark icon"></i>
+                    </div>
+                  </div>
+                </div>
+                <div class="ui segment" style={{ padding: "10px", fontSize: "12px", cursor: "pointer" }}>
                   <p>Перенести</p>
                 </div>
-              </div>
-              <div class={`ui modal tiny`}>
-                <div class="header">Отменить урок</div>
-                <div class="content">
-                  <p>Ты уверен что хочешь отменить урок?</p>
+                <div
+                  class="ui segment"
+                  style={{ padding: "10px", fontSize: "12px", cursor: "pointer" }}
+                  onClick={() => {
+                    $(`#${urok._id}`).modal("show");
+                  }}
+                >
+                  <p>Проведён</p>
                 </div>
-                <div class="actions">
-                  <div class="ui negative button">Нет</div>
-                  <div class="ui positive right labeled icon button">
-                    Да
-                    <i class="checkmark icon"></i>
+                <div class="ui modal tiny" id={urok._id}>
+                  <div class="header">Провести урок</div>
+                  <div class="content">
+                    <p>Ты уверен что хочешь отметить урок как проведен?</p>
+                  </div>
+                  <div class="actions">
+                    <div class="ui negative button">Нет</div>
+                    <div class="ui positive right labeled icon button">
+                      Да
+                      <i class="checkmark icon"></i>
+                    </div>
                   </div>
                 </div>
               </div>
