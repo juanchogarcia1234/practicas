@@ -71,6 +71,8 @@ class Calendar extends React.Component {
     }
   }
 
+  updateClass(id, action) {}
+
   showCalendarHeader() {
     return this.state.currentWeek.map(date => {
       return (
@@ -80,8 +82,6 @@ class Calendar extends React.Component {
       );
     });
   }
-
-  shouldConfigBeVisible() {}
 
   renderClass(startTime, urok) {
     console.log("funciona o no", urok.start_time);
@@ -102,12 +102,21 @@ class Calendar extends React.Component {
                   class="ui segment"
                   style={{ padding: "10px", fontSize: "12px", cursor: "pointer" }}
                   onClick={() => {
-                    $(`#${urok._id}`).modal("show");
+                    $(`#${urok._id}cancel`)
+                      .modal({
+                        onApprove: function () {
+                          console.log("esta funcionando brother");
+                        },
+                        onDeny: function () {
+                          console.log("todos casa");
+                        }
+                      })
+                      .modal("show");
                   }}
                 >
                   <p>Отменить</p>
                 </div>
-                <div class="ui modal tiny" id={urok._id}>
+                <div class="ui modal tiny" id={urok._id + "cancel"}>
                   <div class="header">Отменить урок</div>
                   <div class="content">
                     <p>Ты уверен что хочешь отменить урок?</p>
@@ -127,18 +136,20 @@ class Calendar extends React.Component {
                   class="ui segment"
                   style={{ padding: "10px", fontSize: "12px", cursor: "pointer" }}
                   onClick={() => {
-                    $(`#${urok._id}`).modal("show");
+                    $(`#${urok._id}done`).modal("show");
                   }}
                 >
                   <p>Проведён</p>
                 </div>
-                <div class="ui modal tiny" id={urok._id}>
+                <div class="ui modal tiny" id={urok._id + "done"}>
                   <div class="header">Провести урок</div>
                   <div class="content">
                     <p>Ты уверен что хочешь отметить урок как проведен?</p>
                   </div>
                   <div class="actions">
-                    <div class="ui negative button">Нет</div>
+                    <div class="ui negative button" onClick={() => console.log("helllo")}>
+                      Нет
+                    </div>
                     <div class="ui positive right labeled icon button">
                       Да
                       <i class="checkmark icon"></i>
