@@ -241,7 +241,9 @@ class Calendar extends React.Component {
     //aqui hacer la llamada para obtener los datos
   }
 
-  componentWillUnmount() {}
+  componentWillUnmount() {
+    document.body.removeEventListener("click", this.clickEventListener);
+  }
 
   render() {
     console.log("dia de hoy", currentTimePositions[this.state.currentDay.toString().substring(16, 20) + "0"]);
