@@ -7,6 +7,7 @@ import { formatDateFromDB, formatHour } from "../helpers";
 import Info from "./info";
 import { months, hours, currentTimePositions } from "../constants";
 import Spinner from "./spinner";
+import styles from "./menu.module.css";
 
 class Calendar extends React.Component {
   state = {
@@ -103,12 +104,12 @@ class Calendar extends React.Component {
                 onClick={e => {
                   e.target.nextSibling.style.display === "none" ? (e.target.nextSibling.style.display = "inline-flex") : (e.target.nextSibling.style.display = "none");
                 }}
-                className={`fas fa-ellipsis-v grey`}
+                className={`fas fa-ellipsis-v grey threePoints`}
                 style={{ top: "7px", position: "absolute", right: "5px", cursor: "pointer" }}
               ></i>
-              <div class="ui compact segments" style={{ position: "absolute", right: "-65px", top: "-231%", display: "none" }}>
+              <div class="ui compact segments" style={{ position: "absolute", right: "-84px", top: "-231%", display: "none" }}>
                 <div
-                  class="ui segment"
+                  class={`ui segment ${styles.selected}`}
                   style={{ padding: "10px", fontSize: "12px", cursor: "pointer" }}
                   onClick={() => {
                     $(`#${urok._id}cancel`)
@@ -138,11 +139,11 @@ class Calendar extends React.Component {
                     </div>
                   </div>
                 </div>
-                <div class="ui segment" style={{ padding: "10px", fontSize: "12px", cursor: "pointer" }}>
+                <div class={`ui segment ${styles.selected}`} style={{ padding: "10px", fontSize: "12px", cursor: "pointer" }}>
                   <p>Перенести</p>
                 </div>
                 <div
-                  class="ui segment"
+                  class={`ui segment ${styles.selected}`}
                   style={{ padding: "10px", fontSize: "12px", cursor: "pointer" }}
                   onClick={() => {
                     $(`#${urok._id}done`)
@@ -212,7 +213,25 @@ class Calendar extends React.Component {
       });
   }
 
+  clickEventListener(e) {
+    event.preventDefault();
+    if (!e.target.classList.contains("compact") && !e.target.classList.contains("threePoints")) {
+      console.log("pasa or aqui");
+      console.log("target", e);
+      console.log("este es el elemento de 3 puntos y tiene que dar", !e.target.classList.contains("threePoints"));
+      var list = document.getElementsByClassName("compact");
+      for (let item of list) {
+        item.style.display = "none";
+      }
+    }
+  }
+
   componentDidMount() {
+    document.body.addEventListener("click", this.clickEventListener, false);
+    const toRemove = document.getElementsByClassName("threePoints");
+    for (let item of toRemove) {
+      item.removeEventListener("click", this.clickEventListener);
+    }
     this.fetchWeekClasses();
     this.genNextWeek = this.takeWeek();
 
@@ -222,7 +241,7 @@ class Calendar extends React.Component {
     //aqui hacer la llamada para obtener los datos
   }
 
-  componentDidUpdate() {}
+  componentWillUnmount() {}
 
   render() {
     console.log("dia de hoy", currentTimePositions[this.state.currentDay.toString().substring(16, 20) + "0"]);
