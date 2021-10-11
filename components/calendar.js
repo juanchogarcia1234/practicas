@@ -16,6 +16,7 @@ class Calendar extends React.Component {
     currentWeek: this.getCurrentWeek(),
     currentClasses: [],
     loading: true,
+    updateLoading: false,
     classes: []
   };
 
@@ -72,11 +73,11 @@ class Calendar extends React.Component {
   }
 
   updateClass(id, action) {
-    console.log("hello ma friend");
-    console.log("urok id", id);
-    console.log("action", action);
     if (action === "done") {
-      axios.put("/api/classes", { id: id }).then(response => /*poner aqui un loading*/ this.fetchWeekClasses());
+      this.setState({ updateLoading: true });
+      axios.put("/api/classes", { id: id }).then(response => {
+        this.fetchWeekClasses();
+      });
     }
   }
 
@@ -207,6 +208,7 @@ class Calendar extends React.Component {
         console.log(response);
         this.setState({ classes: response.data.classes });
         this.setState({ loading: false });
+        this.setState({ updateLoading: false });
       });
   }
 
@@ -232,6 +234,7 @@ class Calendar extends React.Component {
         <h2 style={{ textAlign: "center", color: "#5a5a5a" }}>Московское время</h2>
         <div className="spinner-container" style={{ paddingBottom: "60px" }}>
           {this.state.loading && <Spinner text="Загружаются уроки..." position="absolute" bg="transparent" />}
+          {this.state.updateLoading && <Spinner text="Подождите..." position="absolute" bg="transparent" />}
           <table className="ui celled center aligned unstackable table day eight column">
             <thead>
               <tr>
