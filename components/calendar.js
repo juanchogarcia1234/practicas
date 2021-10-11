@@ -71,7 +71,14 @@ class Calendar extends React.Component {
     }
   }
 
-  updateClass(id, action) {}
+  updateClass(id, action) {
+    console.log("hello ma friend");
+    console.log("urok id", id);
+    console.log("action", action);
+    if (action === "done") {
+      axios.put("/api/classes", { id: id }).then(response => /*poner aqui un loading*/ this.fetchWeekClasses());
+    }
+  }
 
   showCalendarHeader() {
     return this.state.currentWeek.map(date => {
@@ -84,6 +91,7 @@ class Calendar extends React.Component {
   }
 
   renderClass(startTime, urok) {
+    const that = this;
     console.log("funciona o no", urok.start_time);
     return (
       <div className="presentation" key={urok.end_time} data-minutes={startTime}>
@@ -105,7 +113,7 @@ class Calendar extends React.Component {
                     $(`#${urok._id}cancel`)
                       .modal({
                         onApprove: function () {
-                          console.log("esta funcionando brother");
+                          that.updateClass(urok._id, "cancel");
                         },
                         onDeny: function () {
                           console.log("todos casa");
@@ -136,7 +144,16 @@ class Calendar extends React.Component {
                   class="ui segment"
                   style={{ padding: "10px", fontSize: "12px", cursor: "pointer" }}
                   onClick={() => {
-                    $(`#${urok._id}done`).modal("show");
+                    $(`#${urok._id}done`)
+                      .modal({
+                        onApprove: function () {
+                          that.updateClass(urok._id, "done");
+                        },
+                        onDeny: function () {
+                          console.log("todos casa");
+                        }
+                      })
+                      .modal("show");
                   }}
                 >
                   <p>Проведён</p>
