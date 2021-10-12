@@ -14,17 +14,22 @@ export default async function handler(req, res) {
 
   //UPDATE CLASSES
   if (req.method === "PUT") {
-    const id = req.body.id;
-    const action = req.body.action;
+    const { id, student, action, classNumber, classCourse } = req.body;
+    console.log("id", id);
+    console.log("action", action);
+    console.log("number", classNumber);
+    console.log("course", classCourse);
+
     var good_id = new ObjectId(id);
     let classes;
     if (action === "done") {
       //set to done
       classes = await classesCollection.updateOne({ _id: good_id }, { $set: { done: true } });
     } else if (action === "cancel") {
-      console.log("entra por cancel");
       //1º cancel class
       classes = await classesCollection.updateOne({ _id: good_id }, { $set: { cancelled: true } });
+      //2º update rest of classes
+      classes = await classesCollection.updateMany({ student: student, course: classCourse, number: { $gt: classNumber } }, { $inc: { number: -1 } });
       console.log(classes);
     }
     client.close();

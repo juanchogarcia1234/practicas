@@ -73,7 +73,7 @@ class Calendar extends React.Component {
     }
   }
 
-  updateClass(id, action) {
+  updateClass(id, student, action, classNumber, classCourse) {
     this.setState({ updateLoading: true });
     if (action === "done") {
       axios.put("/api/classes", { id: id, action: "done" }).then(response => {
@@ -81,7 +81,9 @@ class Calendar extends React.Component {
       });
     } else if (action === "cancel") {
       //1º PUT: Update cancel to true
-      axios.put("/api/classes", { id: id, action: "cancel" }).then(response => {});
+      axios.put("/api/classes", { id: id, student: student, action: "cancel", classNumber: classNumber, classCourse: classCourse }).then(response => {
+        this.fetchWeekClasses();
+      });
       //2º PUT: Update number of rest of classes
       //3º POST: Insert new class with number 8
       //4º this.fetchWeekClasses();
@@ -122,7 +124,7 @@ class Calendar extends React.Component {
                     $(`#${urok._id}cancel`)
                       .modal({
                         onApprove: function () {
-                          that.updateClass(urok._id, "cancel");
+                          that.updateClass(urok._id, urok.student, "cancel", urok.number, urok.course);
                         },
                         onDeny: function () {
                           console.log("todos casa");
