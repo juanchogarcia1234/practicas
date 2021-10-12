@@ -12,16 +12,25 @@ export default async function handler(req, res) {
   const client = await connectToDatabase();
   const classesCollection = client.db().collection("classes");
 
+  //UPDATE CLASSES
   if (req.method === "PUT") {
     const id = req.body.id;
+    const action = req.body.action;
     var good_id = new ObjectId(id);
-
-    console.log(id);
-    const classes = await classesCollection.updateOne({ _id: good_id }, { $set: { done: true } });
-    console.log("ha terminado", classes);
+    let classes;
+    if (action === "done") {
+      //set to done
+      classes = await classesCollection.updateOne({ _id: good_id }, { $set: { done: true } });
+    } else if (action === "cancel") {
+      console.log("entra por cancel");
+      //1º cancel class
+      classes = await classesCollection.updateOne({ _id: good_id }, { $set: { cancelled: true } });
+      console.log(classes);
+    }
     client.close();
     res.status(200).json({ classes });
-  } else {
+  } else if (req.method === "GET") {
+    //GET CLASSES
     let classes;
 
     const { startDate, endDate } = req.query;
@@ -34,5 +43,6 @@ export default async function handler(req, res) {
     }
     client.close();
     res.status(200).json({ classes });
+  } else {
   }
 }

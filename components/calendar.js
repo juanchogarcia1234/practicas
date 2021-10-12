@@ -74,11 +74,17 @@ class Calendar extends React.Component {
   }
 
   updateClass(id, action) {
+    this.setState({ updateLoading: true });
     if (action === "done") {
-      this.setState({ updateLoading: true });
-      axios.put("/api/classes", { id: id }).then(response => {
+      axios.put("/api/classes", { id: id, action: "done" }).then(response => {
         this.fetchWeekClasses();
       });
+    } else if (action === "cancel") {
+      //1º PUT: Update cancel to true
+      axios.put("/api/classes", { id: id, action: "cancel" }).then(response => {});
+      //2º PUT: Update number of rest of classes
+      //3º POST: Insert new class with number 8
+      //4º this.fetchWeekClasses();
     }
   }
 
@@ -108,6 +114,7 @@ class Calendar extends React.Component {
                 style={{ top: "7px", position: "absolute", right: "5px", cursor: "pointer" }}
               ></i>
               <div class="ui compact segments" style={{ position: "absolute", right: "-84px", top: "-231%", display: "none" }}>
+                {/* ОТМЕНИТЬ */}
                 <div
                   class={`ui segment ${styles.selected}`}
                   style={{ padding: "10px", fontSize: "12px", cursor: "pointer" }}
@@ -139,9 +146,13 @@ class Calendar extends React.Component {
                     </div>
                   </div>
                 </div>
+                {/* ОТМЕНИТЬ */}
+                {/* ПЕРЕНЕСТИ */}
                 <div class={`ui segment ${styles.selected}`} style={{ padding: "10px", fontSize: "12px", cursor: "pointer" }}>
                   <p>Перенести</p>
                 </div>
+                {/* ПЕРЕНЕСТИ */}
+                {/* СДЕЛАН */}
                 <div
                   class={`ui segment ${styles.selected}`}
                   style={{ padding: "10px", fontSize: "12px", cursor: "pointer" }}
@@ -175,6 +186,7 @@ class Calendar extends React.Component {
                     </div>
                   </div>
                 </div>
+                {/* СДЕЛАН */}
               </div>
             </>
           )}
@@ -216,9 +228,6 @@ class Calendar extends React.Component {
   clickEventListener(e) {
     event.preventDefault();
     if (!e.target.classList.contains("compact") && !e.target.classList.contains("threePoints")) {
-      console.log("pasa or aqui");
-      console.log("target", e);
-      console.log("este es el elemento de 3 puntos y tiene que dar", !e.target.classList.contains("threePoints"));
       var list = document.getElementsByClassName("compact");
       for (let item of list) {
         item.style.display = "none";
@@ -246,9 +255,6 @@ class Calendar extends React.Component {
   }
 
   render() {
-    console.log("dia de hoy", currentTimePositions[this.state.currentDay.toString().substring(16, 20) + "0"]);
-    console.log("dia de hoy sin current position", this.state.currentDay.toString().substring(16, 20) + "0");
-
     return (
       <>
         <Info />
