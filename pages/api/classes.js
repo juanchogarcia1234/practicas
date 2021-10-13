@@ -26,10 +26,18 @@ export default async function handler(req, res) {
       //set to done
       classes = await classesCollection.updateOne({ _id: good_id }, { $set: { done: true } });
     } else if (action === "cancel") {
-      //1º cancel class
+      //1º cancel class and get number of class to cancel
       classes = await classesCollection.updateOne({ _id: good_id }, { $set: { cancelled: true } });
+      let classToCancellNumber = await classesCollection.find({ _id: good_id }).toArray();
+      classToCancellNumber = classToCancellNumber[0].number;
       //2º update rest of classes
       classes = await classesCollection.updateMany({ student: student, course: classCourse, number: { $gt: classNumber } }, { $inc: { number: -1 } });
+      //3º A) if cancelled class its the last
+      if (classToCancellNumber === 8) {
+      } else {
+      }
+      //3º A) Last class will be number 7 now but if cancelled class was the last, then it will be 8
+      //3º A) new class will be always number 8?
       console.log(classes);
     }
     client.close();
