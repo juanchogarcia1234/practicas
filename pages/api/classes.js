@@ -1,6 +1,7 @@
 import { getSession } from "next-auth/client";
 import { connectToDatabase } from "../../lib/db";
-import { isLastElement } from "../../helpers";
+import { isLastElement, daysMapping } from "../../helpers";
+import { addHours } from "date-fns";
 const ObjectId = require("mongodb").ObjectId;
 
 export default async function handler(req, res) {
@@ -36,6 +37,7 @@ export default async function handler(req, res) {
       //3º Cojo los dias de la semana del curso
       const coursesCollection = client.db().collection("courses");
       let classDays = await coursesCollection.find({ number: classCourse, student: student }).toArray();
+      let classHours = classDays[0].hours;
       classDays = classDays[0].days;
       //3A) Cojo la ultima clase para averiguar que día es y lo comparo con el array de días
       if (classToCancellNumber === 8) {
@@ -46,6 +48,10 @@ export default async function handler(req, res) {
         let dayOfTheNewClass = isLastElement(classDays, lastClass.day) ? classDays[0] : classDays[classDays.indexOf(lastClass.day) + 1];
         console.log("es la ultima clase de la semana", isLastElement(classDays, lastClass.day));
         console.log("la nueva clase va a ser este dia", dayOfTheNewClass);
+        console.log("last class", lastClass);
+        console.log("la nueva clase es esta", daysMapping[dayOfTheNewClass](lastClass.start_time));
+        //4º Inserto la nueva clase
+        let nuevaClase = await classesCollection.insertOne({ number: 8, start_time: daysMapping[dayOfTheNewClass](lastClass.start_time), end_time: addHours(daysMapping[dayOfTheNewClass](lastClass.start_time), 1), student: student, course: classCourse, done: false, cancelled: false, moved: false, paid: true, student_name: student, day: dayOfTheNewClass });
       }
       //3º A) Last class will be number 7 now but if cancelled class was the last, then it will be 8
       //3º A) new class will be always number 8?
