@@ -115,7 +115,7 @@ class Calendar extends React.Component {
                 className={`fas fa-ellipsis-v grey threePoints`}
                 style={{ top: "7px", position: "absolute", right: "5px", cursor: "pointer" }}
               ></i>
-              <div class="ui compact segments" style={{ position: "absolute", right: "-84px", top: "-231%", display: "none" }}>
+              <div class="ui compact segments" style={{ position: "absolute", right: "-84px", top: "-231%", display: "none", zIndex: 999 }}>
                 {/* ОТМЕНИТЬ */}
                 <div
                   class={`ui segment ${styles.selected}`}
