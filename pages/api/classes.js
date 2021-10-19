@@ -51,6 +51,8 @@ export default async function handler(req, res) {
         console.log("last class", lastClass);
         console.log("la nueva clase es esta", daysMapping[dayOfTheNewClass](lastClass.start_time));
         //4º Inserto la nueva clase
+        let newClassTime = classHours[classDays.indexOf(dayOfTheNewClass)];
+
         let nuevaClase = await classesCollection.insertOne({ number: 8, start_time: daysMapping[dayOfTheNewClass](lastClass.start_time), end_time: addHours(daysMapping[dayOfTheNewClass](lastClass.start_time), 1), student: student, course: classCourse, done: false, cancelled: false, moved: false, paid: true, student_name: student, day: dayOfTheNewClass });
       }
       //3º A) Last class will be number 7 now but if cancelled class was the last, then it will be 8
