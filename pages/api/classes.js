@@ -1,7 +1,7 @@
 import { getSession } from "next-auth/client";
 import { connectToDatabase } from "../../lib/db";
 import { isLastElement, daysMapping } from "../../helpers";
-import { addHours, set, parseISO } from "date-fns";
+import { addHours, set, parseISO, setHours, setMinutes } from "date-fns";
 const ObjectId = require("mongodb").ObjectId;
 
 export default async function handler(req, res) {
@@ -46,21 +46,18 @@ export default async function handler(req, res) {
         let lastClass = await classesCollection.find({ number: 7, student: student, course: classCourse }).toArray();
         lastClass = lastClass[0];
         let dayOfTheNewClass = isLastElement(classDays, lastClass.day) ? classDays[0] : classDays[classDays.indexOf(lastClass.day) + 1];
-        console.log("es la ultima clase de la semana", isLastElement(classDays, lastClass.day));
-        console.log("la nueva clase va a ser este dia", dayOfTheNewClass);
-        console.log("last class", lastClass);
-        console.log("days mapping return", daysMapping[dayOfTheNewClass]);
 
-        console.log("hora actual", new Date());
-
-        console.log("la nueva clase es esta", daysMapping[dayOfTheNewClass](lastClass.start_time).toISOString());
-        console.log("setting hours", set(parseISO(daysMapping[dayOfTheNewClass](lastClass.start_time)), { hours: 18, minutes: 45 }));
-        console.log("new Date is this", set(addHours(daysMapping[dayOfTheNewClass](lastClass.start_time), 3), { minutes: 0 }));
-        console.log("new Date with hours set", new Date(new Date().setHours(18, 45)));
         //4º Inserto la nueva clase
         let newClassTime = classHours[classDays.indexOf(dayOfTheNewClass)];
+        let startHour = parseInt(newClassTime.split(":")[0]) + 2;
+        let startMinutes = parseInt(newClassTime.split(":")[1]);
 
-        let nuevaClase = await classesCollection.insertOne({ number: 8, start_time: daysMapping[dayOfTheNewClass](lastClass.start_time), end_time: addHours(daysMapping[dayOfTheNewClass](lastClass.start_time), 1), student: student, course: classCourse, done: false, cancelled: false, moved: false, paid: true, student_name: student, day: dayOfTheNewClass });
+        const startTimeNewClass = set(daysMapping[dayOfTheNewClass](lastClass.start_time), { hours: startHour, minutes: startMinutes });
+        const endTimeNewClass = set(daysMapping[dayOfTheNewClass](lastClass.start_time), { hours: startHour + 1, minutes: startMinutes });
+
+        console.log("next class time", newClassTime);
+
+        let nuevaClase = await classesCollection.insertOne({ number: 8, start_time: startTimeNewClass, end_time: endTimeNewClass, student: student, course: classCourse, done: false, cancelled: false, moved: false, paid: true, student_name: student, day: dayOfTheNewClass });
       }
       //3º A) Last class will be number 7 now but if cancelled class was the last, then it will be 8
       //3º A) new class will be always number 8?
