@@ -1,7 +1,7 @@
 import { getSession } from "next-auth/client";
 import { connectToDatabase } from "../../lib/db";
 import { isLastElement, daysMapping } from "../../helpers";
-import { addHours } from "date-fns";
+import { addHours, set, parseISO } from "date-fns";
 const ObjectId = require("mongodb").ObjectId;
 
 export default async function handler(req, res) {
@@ -49,7 +49,14 @@ export default async function handler(req, res) {
         console.log("es la ultima clase de la semana", isLastElement(classDays, lastClass.day));
         console.log("la nueva clase va a ser este dia", dayOfTheNewClass);
         console.log("last class", lastClass);
-        console.log("la nueva clase es esta", daysMapping[dayOfTheNewClass](lastClass.start_time));
+        console.log("days mapping return", daysMapping[dayOfTheNewClass]);
+
+        console.log("hora actual", new Date());
+
+        console.log("la nueva clase es esta", daysMapping[dayOfTheNewClass](lastClass.start_time).toISOString());
+        console.log("setting hours", set(parseISO(daysMapping[dayOfTheNewClass](lastClass.start_time)), { hours: 18, minutes: 45 }));
+        console.log("new Date is this", set(addHours(daysMapping[dayOfTheNewClass](lastClass.start_time), 3), { minutes: 0 }));
+        console.log("new Date with hours set", new Date(new Date().setHours(18, 45)));
         //4º Inserto la nueva clase
         let newClassTime = classHours[classDays.indexOf(dayOfTheNewClass)];
 
@@ -60,7 +67,7 @@ export default async function handler(req, res) {
       console.log(classes);
     }
     client.close();
-    res.status(200).json({ classes });
+    res.status(200).send(new Date());
   } else if (req.method === "GET") {
     //GET CLASSES
     let classes;
