@@ -43,32 +43,35 @@ export default async function handler(req, res) {
       let classHours = classDays[0].hours;
       classDays = classDays[0].days;
       //3A) Cojo la ultima clase para averiguar que día es y lo comparo con el array de días
+      let lastClass;
+      console.log("classToCancellNumber", classToCancellNumber);
       if (classToCancellNumber === 8) {
-        console.log(classDays.indexOf(classToCancell.day + 1));
+        lastClass = classToCancell;
       } else {
-        console.log("ClassToCancell", classToCancell);
-        console.log("classtocancellStartTime", classToCancell.start_time);
-        console.log("toISOString", classToCancell.start_time.toISOString());
-
-        let lastClass = await classesCollection.find({ number: 7, student: student, course: classCourse, start_time: { $gt: new Date(new Date(classToCancell.start_time.toISOString()).toISOString()) } }).toArray();
-        console.log("ultima clase", lastClass);
-
+        lastClass = await classesCollection.find({ number: 7, student: student, course: classCourse, start_time: { $gt: new Date(new Date(classToCancell.start_time.toISOString()).toISOString()) } }).toArray();
         lastClass = lastClass[0];
-        console.log("ultima clase", lastClass);
-        let dayOfTheNewClass = isLastElement(classDays, lastClass.day) ? classDays[0] : classDays[classDays.indexOf(lastClass.day) + 1];
-
-        //4º Inserto la nueva clase
-        let newClassTime = classHours[classDays.indexOf(dayOfTheNewClass)];
-        let startHour = parseInt(newClassTime.split(":")[0]) + 2;
-        let startMinutes = parseInt(newClassTime.split(":")[1]);
-
-        const startTimeNewClass = set(daysMapping[dayOfTheNewClass](lastClass.start_time), { hours: startHour, minutes: startMinutes });
-        const endTimeNewClass = set(daysMapping[dayOfTheNewClass](lastClass.start_time), { hours: startHour + 1, minutes: startMinutes });
-
-        console.log("next class time", newClassTime);
-
-        let nuevaClase = await classesCollection.insertOne({ number: 8, start_time: startTimeNewClass, end_time: endTimeNewClass, student: student, course: classCourse, done: false, cancelled: false, moved: false, paid: true, student_name: student, day: dayOfTheNewClass });
       }
+      console.log("ClassToCancell", classToCancell);
+      console.log("classtocancellStartTime", classToCancell.start_time);
+      console.log("toISOString", classToCancell.start_time.toISOString());
+
+      console.log("ultima clase", lastClass);
+
+      console.log("ultima clase", lastClass);
+      let dayOfTheNewClass = isLastElement(classDays, lastClass.day) ? classDays[0] : classDays[classDays.indexOf(lastClass.day) + 1];
+
+      //4º Inserto la nueva clase
+      let newClassTime = classHours[classDays.indexOf(dayOfTheNewClass)];
+      let startHour = parseInt(newClassTime.split(":")[0]) + 2;
+      let startMinutes = parseInt(newClassTime.split(":")[1]);
+
+      const startTimeNewClass = set(daysMapping[dayOfTheNewClass](lastClass.start_time), { hours: startHour, minutes: startMinutes });
+      const endTimeNewClass = set(daysMapping[dayOfTheNewClass](lastClass.start_time), { hours: startHour + 1, minutes: startMinutes });
+
+      console.log("next class time", newClassTime);
+
+      let nuevaClase = await classesCollection.insertOne({ number: 8, start_time: startTimeNewClass, end_time: endTimeNewClass, student: student, course: classCourse, done: false, cancelled: false, moved: false, paid: true, student_name: student, day: dayOfTheNewClass });
+
       //3º A) Last class will be number 7 now but if cancelled class was the last, then it will be 8
       //3º A) new class will be always number 8?
       console.log(classes);
