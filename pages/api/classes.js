@@ -21,6 +21,7 @@ export default async function handler(req, res) {
     console.log("action", action);
     console.log("number", classNumber);
     console.log("course", classCourse);
+    console.log("student", student);
 
     var good_id = new ObjectId(id);
     let classes;
@@ -31,20 +32,29 @@ export default async function handler(req, res) {
       //1º cancel class and get number of class to cancel
       classes = await classesCollection.updateOne({ _id: good_id }, { $set: { cancelled: true } });
       let classToCancell = await classesCollection.find({ _id: good_id }).toArray();
-      let classToCancellNumber = classToCancell[0].number;
+      classToCancell = classToCancell[0];
+      let classToCancellNumber = classToCancell.number;
       //2º update rest of classes
       classes = await classesCollection.updateMany({ student: student, course: classCourse, number: { $gt: classNumber } }, { $inc: { number: -1 } });
       //3º Cojo los dias de la semana del curso
       const coursesCollection = client.db().collection("courses");
       let classDays = await coursesCollection.find({ number: classCourse, student: student }).toArray();
+      console.log("clasDays", classDays);
       let classHours = classDays[0].hours;
       classDays = classDays[0].days;
       //3A) Cojo la ultima clase para averiguar que día es y lo comparo con el array de días
       if (classToCancellNumber === 8) {
-        console.log(classDays.indexOf(classToCancell[0].day + 1));
+        console.log(classDays.indexOf(classToCancell.day + 1));
       } else {
-        let lastClass = await classesCollection.find({ number: 7, student: student, course: classCourse }).toArray();
+        console.log("ClassToCancell", classToCancell);
+        console.log("classtocancellStartTime", classToCancell.start_time);
+        console.log("toISOString", classToCancell.start_time.toISOString());
+
+        let lastClass = await classesCollection.find({ number: 7, student: student, course: classCourse, start_time: { $gt: new Date(new Date(classToCancell.start_time.toISOString()).toISOString()) } }).toArray();
+        console.log("ultima clase", lastClass);
+
         lastClass = lastClass[0];
+        console.log("ultima clase", lastClass);
         let dayOfTheNewClass = isLastElement(classDays, lastClass.day) ? classDays[0] : classDays[classDays.indexOf(lastClass.day) + 1];
 
         //4º Inserto la nueva clase
@@ -64,12 +74,13 @@ export default async function handler(req, res) {
       console.log(classes);
     }
     client.close();
-    res.status(200).send(new Date());
+    res.status(200).json({ classes });
   } else if (req.method === "GET") {
     //GET CLASSES
     let classes;
 
     const { startDate, endDate } = req.query;
+    console.log("me dijo en este stardate", startDate);
     if (session.user.email === "juan@gmail.com") {
       //retorno todas
       classes = await classesCollection.find({ start_time: { $gte: new Date(new Date(startDate).toISOString()) }, end_time: { $lte: new Date(new Date(endDate).toISOString()) } }).toArray();
