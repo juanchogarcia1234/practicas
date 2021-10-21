@@ -1,2 +1,0 @@
-- mirar el caso en el que la clase a cancelar es la clase 7
-- mirar el caso en el que la clase a cancelar es la clase 8

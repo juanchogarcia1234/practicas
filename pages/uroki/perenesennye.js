@@ -14,7 +14,7 @@ export default function Cancelled({ sessionActiva }) {
       if (!sesion) {
         window.location.href = "/login";
       } else {
-        axios.get("/api/otmenennye").then(response => {
+        axios.get("/api/perenesennye").then(response => {
           setLoading(false);
 
           console.log("movidas", response);
