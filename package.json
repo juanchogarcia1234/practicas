@@ -21,6 +21,7 @@
     "next-auth": "^3.27.3",
     "react": "17.0.1",
     "react-dom": "17.0.1",
+    "semantic-ui-calendar": "0.0.8",
     "semantic-ui-css": "^2.4.1",
     "underscore.string": "^3.3.5"
   }

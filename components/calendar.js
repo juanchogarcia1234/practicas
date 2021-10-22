@@ -154,8 +154,46 @@ class Calendar extends React.Component {
                 </div>
                 {/* ОТМЕНИТЬ */}
                 {/* ПЕРЕНЕСТИ */}
-                <div class={`ui segment ${styles.selected}`} style={{ padding: "10px", fontSize: "12px", cursor: "pointer" }}>
+                <div
+                  class={`ui segment ${styles.selected}`}
+                  style={{ padding: "10px", fontSize: "12px", cursor: "pointer" }}
+                  onClick={() => {
+                    $(`#${urok._id}done`)
+                      .modal({
+                        onApprove: function () {
+                          console.log("se muestra");
+                          that.updateClass(urok._id, urok.student, "done", urok.number, urok.course);
+                        },
+                        onDeny: function () {
+                          console.log("todos casa");
+                        }
+                      })
+                      .modal("show");
+                    $(".ui.calendar").calendar();
+                  }}
+                >
                   <p>Перенести</p>
+                </div>
+                <div class="ui modal tiny" id={urok._id + "done"}>
+                  <div class="header">Перенести урок</div>
+                  <div class="content">
+                    <h3 onClick={() => $("#example1").calendar()}>На какое время?</h3>
+                    <div class="ui calendar" id="example1" onClick={() => $("#example1").calendar()}>
+                      <div class="ui input left icon">
+                        <i class="calendar icon"></i>
+                        <input type="text" placeholder="Date/Time" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="actions">
+                    <div class="ui negative button" onClick={() => console.log("helllo")}>
+                      Нет
+                    </div>
+                    <div class="ui positive right labeled icon button">
+                      Да
+                      <i class="checkmark icon"></i>
+                    </div>
+                  </div>
                 </div>
                 {/* ПЕРЕНЕСТИ */}
                 {/* СДЕЛАН */}
