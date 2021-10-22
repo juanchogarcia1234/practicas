@@ -74,8 +74,12 @@ class Calendar extends React.Component {
   }
 
   updateClass(id, student, action, classNumber, classCourse) {
+    console.log("pasa por aqui1");
+
     this.setState({ updateLoading: true });
+    console.log("pasa por aqui");
     if (action === "done") {
+      console.log("por aqui tambien pasa");
       axios.put("/api/classes", { id: id, action: "done" }).then(response => {
         this.fetchWeekClasses();
       });
@@ -162,7 +166,8 @@ class Calendar extends React.Component {
                     $(`#${urok._id}done`)
                       .modal({
                         onApprove: function () {
-                          that.updateClass(urok._id, "done");
+                          console.log("se muestra");
+                          that.updateClass(urok._id, urok.student, "done", urok.number, urok.course);
                         },
                         onDeny: function () {
                           console.log("todos casa");

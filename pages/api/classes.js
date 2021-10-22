@@ -28,6 +28,7 @@ export default async function handler(req, res) {
     if (action === "done") {
       //set to done
       classes = await classesCollection.updateOne({ _id: good_id }, { $set: { done: true } });
+      console.log("finitio");
     } else if (action === "cancel") {
       //1º cancel class and get number of class to cancel
       classes = await classesCollection.updateOne({ _id: good_id }, { $set: { cancelled: true } });
