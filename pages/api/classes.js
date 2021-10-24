@@ -16,19 +16,12 @@ export default async function handler(req, res) {
 
   //UPDATE CLASSES
   if (req.method === "PUT") {
-    const { id, student, action, classNumber, classCourse } = req.body;
-    console.log("id", id);
-    console.log("action", action);
-    console.log("number", classNumber);
-    console.log("course", classCourse);
-    console.log("student", student);
-
+    const { id, student, action, classNumber, classCourse, dateToMove } = req.body;
     var good_id = new ObjectId(id);
     let classes;
     if (action === "done") {
       //set to done
       classes = await classesCollection.updateOne({ _id: good_id }, { $set: { done: true } });
-      console.log("finitio");
     } else if (action === "cancel") {
       //1º cancel class and get number of class to cancel
       classes = await classesCollection.updateOne({ _id: good_id }, { $set: { cancelled: true } });
@@ -45,20 +38,13 @@ export default async function handler(req, res) {
       classDays = classDays[0].days;
       //3A) Cojo la ultima clase para averiguar que día es y lo comparo con el array de días
       let lastClass;
-      console.log("classToCancellNumber", classToCancellNumber);
       if (classToCancellNumber === 8) {
         lastClass = classToCancell;
       } else {
         lastClass = await classesCollection.find({ number: 7, student: student, course: classCourse, start_time: { $gt: new Date(new Date(classToCancell.start_time.toISOString()).toISOString()) } }).toArray();
         lastClass = lastClass[0];
       }
-      console.log("ClassToCancell", classToCancell);
-      console.log("classtocancellStartTime", classToCancell.start_time);
-      console.log("toISOString", classToCancell.start_time.toISOString());
 
-      console.log("ultima clase", lastClass);
-
-      console.log("ultima clase", lastClass);
       let dayOfTheNewClass = isLastElement(classDays, lastClass.day) ? classDays[0] : classDays[classDays.indexOf(lastClass.day) + 1];
 
       //4º Inserto la nueva clase
@@ -67,15 +53,24 @@ export default async function handler(req, res) {
       let startMinutes = parseInt(newClassTime.split(":")[1]);
 
       const startTimeNewClass = set(daysMapping[dayOfTheNewClass](lastClass.start_time), { hours: startHour, minutes: startMinutes });
-      const endTimeNewClass = set(daysMapping[dayOfTheNewClass](lastClass.start_time), { hours: startHour + 1, minutes: startMinutes });
 
-      console.log("next class time", newClassTime);
+      console.log("formato correcto", startTimeNewClass);
+      const endTimeNewClass = set(daysMapping[dayOfTheNewClass](lastClass.start_time), { hours: startHour + 1, minutes: startMinutes });
 
       let nuevaClase = await classesCollection.insertOne({ number: 8, start_time: startTimeNewClass, end_time: endTimeNewClass, student: student, course: classCourse, done: false, cancelled: false, moved: false, paid: true, student_name: student, day: dayOfTheNewClass });
 
       //3º A) Last class will be number 7 now but if cancelled class was the last, then it will be 8
       //3º A) new class will be always number 8?
       console.log(classes);
+    } else if (action === "move") {
+      //la fecha me aparece con 3 horas menos
+      //1 cambiar fecha
+      //2 cambiar estado a moved
+      //3
+      classes = await classesCollection.updateOne({ _id: good_id }, { $set: { moved: true, start_time: addHours(parseISO(dateToMove), 3), end_time: addHours(parseISO(dateToMove), 4) } });
+
+      console.log("dateToMOve");
+      console.log("dateToMOve", addHours(parseISO(dateToMove), 4));
     }
     client.close();
     res.status(200).json({ classes });
@@ -84,7 +79,6 @@ export default async function handler(req, res) {
     let classes;
 
     const { startDate, endDate } = req.query;
-    console.log("me dijo en este stardate", startDate);
     if (session.user.email === "juan@gmail.com") {
       //retorno todas
       classes = await classesCollection.find({ start_time: { $gte: new Date(new Date(startDate).toISOString()) }, end_time: { $lte: new Date(new Date(endDate).toISOString()) } }).toArray();

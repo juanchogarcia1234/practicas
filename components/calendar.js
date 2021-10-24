@@ -73,24 +73,21 @@ class Calendar extends React.Component {
     }
   }
 
-  updateClass(id, student, action, classNumber, classCourse) {
-    console.log("pasa por aqui1");
-
+  updateClass(id, student, action, classNumber, classCourse, dateToMove) {
     this.setState({ updateLoading: true });
-    console.log("pasa por aqui");
     if (action === "done") {
-      console.log("por aqui tambien pasa");
-      axios.put("/api/classes", { id: id, action: "done" }).then(response => {
+      axios.put("/api/classes", { id, action: "done" }).then(response => {
         this.fetchWeekClasses();
       });
     } else if (action === "cancel") {
-      //1º PUT: Update cancel to true
-      axios.put("/api/classes", { id: id, student: student, action: "cancel", classNumber: classNumber, classCourse: classCourse }).then(response => {
+      axios.put("/api/classes", { id, student, action: "cancel", classNumber, classCourse }).then(response => {
         this.fetchWeekClasses();
       });
-      //2º PUT: Update number of rest of classes
-      //3º POST: Insert new class with number 8
-      //4º this.fetchWeekClasses();
+    } else if (action === "move") {
+      axios.put("/api/classes", { id, action: "move", dateToMove }).then(response => {
+        this.fetchWeekClasses();
+      });
+      console.log("esta funcionando", dateToMove);
     }
   }
 
@@ -106,7 +103,6 @@ class Calendar extends React.Component {
 
   renderClass(startTime, urok) {
     const that = this;
-    console.log("funciona o no", urok.start_time);
     return (
       <div className="presentation" key={urok.end_time} data-minutes={startTime}>
         <div className="ui raised  text  segment urok" style={{ paddingTop: 0, position: "relative" }}>
@@ -161,8 +157,10 @@ class Calendar extends React.Component {
                     $(`#${urok._id}done`)
                       .modal({
                         onApprove: function () {
-                          console.log("se muestra");
-                          that.updateClass(urok._id, urok.student, "done", urok.number, urok.course);
+                          let newclassDate = $(".ui.calendar").calendar("get date");
+                          newclassDate = newclassDate.filter(el => el !== null);
+                          console.log("mover a esta fecha", newclassDate[0]);
+                          that.updateClass(urok._id, urok.student, "move", urok.number, urok.course, newclassDate[0]);
                         },
                         onDeny: function () {
                           console.log("todos casa");
@@ -288,11 +286,6 @@ class Calendar extends React.Component {
     }
     this.fetchWeekClasses();
     this.genNextWeek = this.takeWeek();
-
-    //Para que necesito esto?
-    // this.setState({ currentWeek: this.genNextWeek() });
-
-    //aqui hacer la llamada para obtener los datos
   }
 
   componentWillUnmount() {
@@ -362,9 +355,5 @@ class Calendar extends React.Component {
     );
   }
 }
-
-// const mapStateToProps = state => {
-//   return { token: state.token, classes: state.classes, dataStatus: state.dataStatus };
-// };
 
 export default Calendar;
