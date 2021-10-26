@@ -295,7 +295,7 @@ class Calendar extends React.Component {
   render() {
     return (
       <>
-        <h2 style={{ textAlign: "center", color: "#5a5a5a", marginBottom: "20px" }}>Уроки по московскому времени</h2>
+        <h2 style={{ textAlign: "center", color: "#5a5a5a", marginBottom: "20px" }}>Уроки по рижскому времени</h2>
         <Info />
         <div className="spinner-container" style={{ paddingBottom: "60px" }}>
           {this.state.loading && <Spinner text="Загружаются уроки..." position="absolute" bg="transparent" />}

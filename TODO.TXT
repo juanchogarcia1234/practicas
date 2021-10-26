@@ -1,7 +1,15 @@
-<h3>Input</h3>
-  <div class="ui calendar" id="example1">
-    <div class="ui input left icon">
-      <i class="calendar icon"></i>
-      <input type="text" placeholder="Date/Time">
-    </div>
-  </div>
+ROADMAP
+- cambiar el campo de paid al curso 1
+- hacer que las clases automáticamente se pongan como done si no las he tocado 2
+- ver todo tipo de variantes para clases moved 2
+- conectar con la api de caixabank para ver quien ha pagado y que se actualice el campo de paid automáticamente 4
+- conectar con la api de zoom y poner un icono con las grabaciones disponibles para cada clases 4
+- crear funcionalidad para añadir nuevo curso 1
+- añadir clases individuales
+
+PRIORITY ORDER
+1 Very high
+2 High
+3 Medium
+4 Low
+5 Very Low

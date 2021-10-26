@@ -44,7 +44,7 @@ export default function Menu({ session, user }) {
       {user === "juan@gmail.com" && (
         <Link
           className="item"
-          href="/uroki/perenesennye"
+          href="/uroki/newcourse"
           activeStyle={{
             fontWeight: "bold"
           }}
