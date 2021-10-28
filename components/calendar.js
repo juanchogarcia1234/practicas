@@ -154,7 +154,7 @@ class Calendar extends React.Component {
                   class={`ui segment ${styles.selected}`}
                   style={{ padding: "10px", fontSize: "12px", cursor: "pointer" }}
                   onClick={() => {
-                    $(`#${urok._id}done`)
+                    $(`#${urok._id}move`)
                       .modal({
                         onApprove: function () {
                           let newclassDate = $(".ui.calendar").calendar("get date");
@@ -172,7 +172,7 @@ class Calendar extends React.Component {
                 >
                   <p>Перенести</p>
                 </div>
-                <div class="ui modal tiny" id={urok._id + "done"}>
+                <div class="ui modal tiny" id={urok._id + "move"}>
                   <div class="header">Перенести урок</div>
                   <div class="content">
                     <h3 onClick={() => $("#example1").calendar()}>На какое время?</h3>

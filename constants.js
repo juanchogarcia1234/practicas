@@ -100,3 +100,15 @@ export const currentTimePositions = {
   "23:50": "97%",
   "24:00": "98%"
 };
+export const mappingWeekDays = {
+  "L": "понедельник",
+  "M": "вторник",
+  "X": "среда",
+  "J": "четверг",
+  "V": "пятница",
+  "S": "суббота",
+  "D": "воскресенье"
+};
+export function immutableSplice(arr, start, deleteCount, ...items) {
+  return [...arr.slice(0, start), ...items, ...arr.slice(start + deleteCount)];
+}
