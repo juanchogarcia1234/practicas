@@ -88,6 +88,7 @@ export default async function handler(req, res) {
     }
     client.close();
     res.status(200).json({ classes });
-  } else {
+  } else if (req.method === "POST") {
+    // const { id, student, action, classNumber, classCourse, dateToMove } = req.body;
   }
 }

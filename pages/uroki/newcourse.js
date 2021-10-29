@@ -184,6 +184,20 @@ export default function newCourse({ sessionActiva }) {
         <button
           class="positive ui button big"
           onClick={() => {
+            //Get last course
+            axios.get("/api/courses", { params: { student: chosenUser } }).then(res => {
+              let courseNumber = res.data.courses.length === 0 ? 1 : res.data.courses[0].number + 1;
+              axios
+                .post("/api/courses", {
+                  student: chosenUser,
+                  startDate,
+                  weekDays,
+                  weekHours,
+                  numberOfClasses: weekDays.length,
+                  number: courseNumber
+                })
+                .then(res => console.log(res));
+            });
             console.log("Student", chosenUser);
             console.log("Start Date", startDate);
             console.log("Week Days", weekDays);
@@ -193,6 +207,7 @@ export default function newCourse({ sessionActiva }) {
         >
           Добавить курс
         </button>
+        <br />
       </div>
     </Layout>
   );
