@@ -15,3 +15,7 @@ export const daysMapping = {
   S: nextSaturday,
   D: nextSunday
 };
+
+export const getNextArrElement = (index, arr) => {
+  return arr[(index + 1) % arr.length];
+};

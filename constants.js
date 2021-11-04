@@ -109,6 +109,7 @@ export const mappingWeekDays = {
   "S": "суббота",
   "D": "воскресенье"
 };
+export const mappingWeekDaysNumbers = ["D", "L", "M", "X", "J", "V", "S"];
 export function immutableSplice(arr, start, deleteCount, ...items) {
   return [...arr.slice(0, start), ...items, ...arr.slice(start + deleteCount)];
 }

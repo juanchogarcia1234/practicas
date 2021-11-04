@@ -3,6 +3,7 @@ import axios from "axios";
 import { startOfMonth, startOfWeek, endOfWeek, startOfDay, addDays, subDays, endOfYear, format, getMonth, getYear, getWeek } from "date-fns";
 import { ru } from "date-fns/locale";
 import { capitalize } from "underscore.string";
+import { uniq } from "underscore";
 import { formatDateFromDB, formatHour } from "../helpers";
 import Info from "./info";
 import { months, hours, currentTimePositions } from "../constants";
@@ -18,7 +19,8 @@ class Calendar extends React.Component {
     currentClasses: [],
     loading: true,
     updateLoading: false,
-    classes: []
+    classes: [],
+    courses: []
   };
 
   isOnlyOneMonth(week) {
@@ -103,6 +105,15 @@ class Calendar extends React.Component {
 
   renderClass(startTime, urok) {
     const that = this;
+    //aqui busco el curso del state que tenga el mismo student y el mismo numero que urok.student & urok.course
+    let matchingCourse = this.state.courses.filter(course => course.student === urok.student && course.number === urok.course);
+    matchingCourse = matchingCourse[0];
+    console.log("matchingCourse", matchingCourse);
+    let pagado;
+    if (matchingCourse) {
+      pagado = matchingCourse.paid;
+    }
+    //luego chequeo el campo paid del course y si es y pongo la variable pagado a true or false
     return (
       <div className="presentation" key={urok.end_time} data-minutes={startTime}>
         <div className="ui raised  text  segment urok" style={{ paddingTop: 0, position: "relative" }}>
@@ -240,7 +251,7 @@ class Calendar extends React.Component {
             <i className={`check icon ${urok.done ? "green" : "grey"}`}></i>
             <i className={`share icon ${urok.moved ? "blue" : "grey"}`}></i>
             <i className={`times close icon ${urok.cancelled ? "red" : "grey"}`}></i>
-            <i className={`ruble sign icon ${urok.paid ? "green" : "grey"}`}></i>
+            <i className={`ruble sign icon ${pagado ? "green" : "grey"}`}></i>
           </div>
         </div>
       </div>
@@ -262,8 +273,20 @@ class Calendar extends React.Component {
       })
       .then(response => {
         console.log(response);
-        this.setState({ classes: response.data.classes });
-        this.setState({ loading: false });
+        this.setState({ classes: response.data.classes }, () => {
+          let alumnos = this.state.classes.map(classItem => {
+            return { alumno: classItem.student, curso: classItem.course };
+          });
+          let alumnosUnicos = uniq(alumnos, item => item.alumno);
+          alumnosUnicos.forEach(student => {
+            axios.get("/api/courses", { params: { student: student.alumno, course: student.curso } }).then(res => {
+              console.log("unique curso", res.data.courses[0]);
+              this.setState({ courses: [...this.state.courses, res.data.courses[0]] });
+              console.log("cursos state", this.state.courses);
+              this.setState({ loading: false });
+            });
+          });
+        });
         this.setState({ updateLoading: false });
       });
   }
@@ -293,6 +316,7 @@ class Calendar extends React.Component {
   }
 
   render() {
+    console.log(this.state.classes);
     return (
       <>
         <h2 style={{ textAlign: "center", color: "#5a5a5a", marginBottom: "20px" }}>Уроки по рижскому времени</h2>

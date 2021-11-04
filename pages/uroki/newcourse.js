@@ -4,7 +4,9 @@ import Spinner from "../../components/spinner";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Head from "next/head";
-import { mappingWeekDays, immutableSplice } from "../../constants";
+import { mappingWeekDays, immutableSplice, mappingWeekDaysNumbers } from "../../constants";
+import { getDay } from "date-fns";
+import { daysMapping, getNextArrElement } from "../../helpers";
 
 export default function newCourse({ sessionActiva }) {
   //Usuario elegido
@@ -196,7 +198,24 @@ export default function newCourse({ sessionActiva }) {
                   numberOfClasses: weekDays.length,
                   number: courseNumber
                 })
-                .then(res => console.log(res));
+                .then(res => {
+                  //1 Creo la primera clase con el startDate
+                  axios
+                    .post("/api/classes", {
+                      student: chosenUser,
+                      startDate,
+                      courseNumber,
+                      day: mappingWeekDaysNumbers[getDay(new Date(startDate))]
+                    })
+                    .then(res => console.log("que muestra esto", res));
+                  //2 Veo que dia de la semana es la primera clase y lo comparo con el array
+                  console.log("Este es el dia de la primera clase", mappingWeekDaysNumbers[getDay(new Date(startDate))]);
+                  const nextClassDay = getNextArrElement(weekDays.indexOf(mappingWeekDaysNumbers[getDay(new Date(startDate))]), weekDays);
+                  const nextClass = daysMapping[nextClassDay](new Date(startDate));
+                  console.log(nextClass);
+                  //3 Cojo el siguiente elemento del array de weekDays y veo que dia es el nextX para crear la siguiente clase
+                  console.log(res);
+                });
             });
             console.log("Student", chosenUser);
             console.log("Start Date", startDate);
