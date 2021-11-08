@@ -1,5 +1,5 @@
 ROADMAP
-- cambiar el campo de paid al curso 1
+- cambiar el campo de paid al curso 1 (solucionar cuando hay dos cursos en una misma semana)
 - hacer que las clases automáticamente se pongan como done si no las he tocado 2
 - ver todo tipo de variantes para clases moved 2
 - conectar con la api de caixabank para ver quien ha pagado y que se actualice el campo de paid automáticamente 4

@@ -277,7 +277,13 @@ class Calendar extends React.Component {
           let alumnos = this.state.classes.map(classItem => {
             return { alumno: classItem.student, curso: classItem.course };
           });
+          console.log("Alumnos", alumnos);
+
           let alumnosUnicos = uniq(alumnos, item => item.alumno);
+          alumnosUnicos.forEach(item => {
+            alumnos.find(e => e.alumno === item.alumno && e.curso !== item.curso && alumnosUnicos.push(e));
+          });
+          console.log("Alumnos únicos", alumnosUnicos);
           alumnosUnicos.forEach(student => {
             axios.get("/api/courses", { params: { student: student.alumno, course: student.curso } }).then(res => {
               console.log("unique curso", res.data.courses[0]);
