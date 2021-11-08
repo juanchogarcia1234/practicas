@@ -251,7 +251,7 @@ class Calendar extends React.Component {
             <i className={`check icon ${urok.done ? "green" : "grey"}`}></i>
             <i className={`share icon ${urok.moved ? "blue" : "grey"}`}></i>
             <i className={`times close icon ${urok.cancelled ? "red" : "grey"}`}></i>
-            <i className={`ruble sign icon ${pagado ? "green" : "grey"}`}></i>
+            <i className={`ruble sign icon ${pagado ? "yellow" : "grey"}`}></i>
           </div>
         </div>
       </div>
@@ -272,23 +272,19 @@ class Calendar extends React.Component {
         }
       })
       .then(response => {
-        console.log(response);
         this.setState({ classes: response.data.classes }, () => {
           let alumnos = this.state.classes.map(classItem => {
             return { alumno: classItem.student, curso: classItem.course };
           });
-          console.log("Alumnos", alumnos);
 
           let alumnosUnicos = uniq(alumnos, item => item.alumno);
           alumnosUnicos.forEach(item => {
             alumnos.find(e => e.alumno === item.alumno && e.curso !== item.curso && alumnosUnicos.push(e));
           });
-          console.log("Alumnos únicos", alumnosUnicos);
+
           alumnosUnicos.forEach(student => {
             axios.get("/api/courses", { params: { student: student.alumno, course: student.curso } }).then(res => {
-              console.log("unique curso", res.data.courses[0]);
               this.setState({ courses: [...this.state.courses, res.data.courses[0]] });
-              console.log("cursos state", this.state.courses);
               this.setState({ loading: false });
             });
           });

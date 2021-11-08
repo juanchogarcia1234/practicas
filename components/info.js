@@ -29,7 +29,7 @@ const Info = () => {
       </div>
       <div className="info-classes-divider">
         <div>
-          <i className="ruble sign icon green"></i>оплачен
+          <i className="ruble sign icon yellow"></i>оплачен
         </div>
         <div>
           <i className="ruble sign icon grey"></i>не оплачен
