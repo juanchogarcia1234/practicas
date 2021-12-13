@@ -5,8 +5,9 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Head from "next/head";
 import { mappingWeekDays, immutableSplice, mappingWeekDaysNumbers } from "../../constants";
-import { getDay } from "date-fns";
+import { getDay, formatISO } from "date-fns";
 import { daysMapping, getNextArrElement } from "../../helpers";
+import { toDate } from "date-fns-tz";
 
 export default function newCourse({ sessionActiva }) {
   //Usuario elegido
@@ -189,30 +190,61 @@ export default function newCourse({ sessionActiva }) {
             //Get last course
             axios.get("/api/courses", { params: { student: chosenUser } }).then(res => {
               let courseNumber = res.data.courses.length === 0 ? 1 : res.data.courses[0].number + 1;
+              console.log("esto es del browser sin formatear", new Date(startDate));
+              console.log("esto es del browser formatISO", formatISO(new Date(startDate)));
+
+              console.log("esto es del browser formateada toISo", toDate(new Date(startDate), { timeZone: "Europe/Riga" }).toISOString());
+
               axios
                 .post("/api/courses", {
                   student: chosenUser,
-                  startDate,
+                  startDate: formatISO(new Date(startDate)),
                   weekDays,
                   weekHours,
                   numberOfClasses: weekDays.length,
                   number: courseNumber
                 })
                 .then(res => {
+                  console.log("esto es lo que hace formatISO", formatISO(new Date(startDate)));
                   //1 Creo la primera clase con el startDate
                   axios
                     .post("/api/classes", {
                       student: chosenUser,
-                      startDate,
+                      startDate: formatISO(new Date(startDate)),
+                      endDate: formatISO(new Date(startDate).setHours(new Date(startDate).getHours() + 1)),
                       courseNumber,
-                      day: mappingWeekDaysNumbers[getDay(new Date(startDate))]
+                      day: mappingWeekDaysNumbers[getDay(new Date(startDate))],
+                      number: 1
                     })
-                    .then(res => console.log("que muestra esto", res));
+                    .then(res => {
+                      let currentClass = new Date(startDate);
+                      let currentNumber = 1;
+
+                      [...Array(7)].forEach((_, i) => {
+                        console.log("CURRENT CLASS", currentClass);
+                        const nextClassDay = getNextArrElement(weekDays.indexOf(mappingWeekDaysNumbers[getDay(currentClass)]), weekDays);
+                        //Change the current class
+                        currentClass = daysMapping[nextClassDay](currentClass);
+                        //Change current class number
+                        currentNumber += 1;
+                        //Aqui hago la llamada
+                        axios.post("/api/classes", {
+                          student: chosenUser,
+                          startDate: formatISO(currentClass),
+                          courseNumber,
+                          day: nextClassDay,
+                          number: currentNumber
+                        });
+                        console.log("clase una por una", nextClassDay);
+                      });
+                    });
+
                   //2 Veo que dia de la semana es la primera clase y lo comparo con el array
                   console.log("Este es el dia de la primera clase", mappingWeekDaysNumbers[getDay(new Date(startDate))]);
                   const nextClassDay = getNextArrElement(weekDays.indexOf(mappingWeekDaysNumbers[getDay(new Date(startDate))]), weekDays);
+                  console.log("Esta va a ser el dia de la siguiente clase", nextClassDay);
                   const nextClass = daysMapping[nextClassDay](new Date(startDate));
-                  console.log(nextClass);
+                  console.log("Esta va a ser la siguiente clase", nextClass);
                   //3 Cojo el siguiente elemento del array de weekDays y veo que dia es el nextX para crear la siguiente clase
                   console.log(res);
                 });

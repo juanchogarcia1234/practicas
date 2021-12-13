@@ -285,10 +285,10 @@ class Calendar extends React.Component {
           alumnosUnicos.forEach(student => {
             axios.get("/api/courses", { params: { student: student.alumno, course: student.curso } }).then(res => {
               this.setState({ courses: [...this.state.courses, res.data.courses[0]] });
-              this.setState({ loading: false });
             });
           });
         });
+        this.setState({ loading: false });
         this.setState({ updateLoading: false });
       });
   }
@@ -318,7 +318,8 @@ class Calendar extends React.Component {
   }
 
   render() {
-    console.log(this.state.classes);
+    console.log("esta es la variable", process.env.NEXT_PUBLIC_TZ);
+    console.log("hora ACTUAL", new Date());
     return (
       <>
         <h2 style={{ textAlign: "center", color: "#5a5a5a", marginBottom: "20px" }}>Уроки по рижскому времени</h2>

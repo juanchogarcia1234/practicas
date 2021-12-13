@@ -89,8 +89,16 @@ export default async function handler(req, res) {
     client.close();
     res.status(200).json({ classes });
   } else if (req.method === "POST") {
-    const { startDate, student, courseNumber, day } = req.body;
-    let clasePrimera = await classesCollection.insertOne({ number: 1, start_time: addHours(new Date(startDate), 2), end_time: addHours(new Date(startDate), 3), student: student, course: courseNumber, done: false, cancelled: false, moved: false, paid: false, student_name: student, day: day });
+    const { startDate, endDate, student, courseNumber, number, day } = req.body;
+    console.log("HORA DE LA CLASE", startDate);
+    console.log("horas a añadir", Number(startDate[21]));
+
+    console.log("HORA DE LA CLASE CON NEW DATE", new Date(startDate));
+    console.log("HORA DE LA CLASE FINAL", endDate);
+
+    console.log("HORA DE LA CLASE PARSEADA", parseISO(startDate));
+
+    let clasePrimera = await classesCollection.insertOne({ number: number, start_time: addHours(new Date(startDate), Number(startDate[21])), end_time: addHours(new Date(startDate), Number(startDate[21]) + 1), student: student, course: courseNumber, done: false, cancelled: false, moved: false, paid: false, student_name: student, day: day });
     client.close();
     res.status(200).json({ clasePrimera });
   }
