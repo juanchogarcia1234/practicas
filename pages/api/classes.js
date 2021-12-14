@@ -23,20 +23,24 @@ export default async function handler(req, res) {
       //set to done
       classes = await classesCollection.updateOne({ _id: good_id }, { $set: { done: true } });
     } else if (action === "cancel") {
-      //1º cancel class and get number of class to cancel
+      //Cancel class
       classes = await classesCollection.updateOne({ _id: good_id }, { $set: { cancelled: true } });
       let classToCancell = await classesCollection.find({ _id: good_id }).toArray();
       classToCancell = classToCancell[0];
+
+      //Number of class to cancel
       let classToCancellNumber = classToCancell.number;
-      //2º update rest of classes
+
+      //Update number of the rest of classes
       classes = await classesCollection.updateMany({ student: student, course: classCourse, number: { $gt: classNumber } }, { $inc: { number: -1 } });
-      //3º Cojo los dias de la semana del curso
+
+      //Get weeks days of course
       const coursesCollection = client.db().collection("courses");
       let classDays = await coursesCollection.find({ number: classCourse, student: student }).toArray();
-      console.log("clasDays", classDays);
       let classHours = classDays[0].hours;
       classDays = classDays[0].days;
-      //3A) Cojo la ultima clase para averiguar que día es y lo comparo con el array de días
+
+      //Get last class week day
       let lastClass;
       if (classToCancellNumber === 8) {
         lastClass = classToCancell;
@@ -45,11 +49,15 @@ export default async function handler(req, res) {
         lastClass = lastClass[0];
       }
 
+      //Compare it with days array
       let dayOfTheNewClass = isLastElement(classDays, lastClass.day) ? classDays[0] : classDays[classDays.indexOf(lastClass.day) + 1];
 
-      //4º Inserto la nueva clase
+      //Insert new class
       let newClassTime = classHours[classDays.indexOf(dayOfTheNewClass)];
+      console.log("newClassTime", newClassTime);
+
       let startHour = parseInt(newClassTime.split(":")[0]) + 2;
+      console.log("startHour", startHour);
       let startMinutes = parseInt(newClassTime.split(":")[1]);
 
       const startTimeNewClass = set(daysMapping[dayOfTheNewClass](lastClass.start_time), { hours: startHour, minutes: startMinutes });
@@ -59,8 +67,6 @@ export default async function handler(req, res) {
 
       let nuevaClase = await classesCollection.insertOne({ number: 8, start_time: startTimeNewClass, end_time: endTimeNewClass, student: student, course: classCourse, done: false, cancelled: false, moved: false, paid: true, student_name: student, day: dayOfTheNewClass });
 
-      //3º A) Last class will be number 7 now but if cancelled class was the last, then it will be 8
-      //3º A) new class will be always number 8?
       console.log(classes);
     } else if (action === "move") {
       //la fecha me aparece con 3 horas menos

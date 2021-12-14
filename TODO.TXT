@@ -1,4 +1,6 @@
 ROADMAP
+- Mirar porque cuando cancelo una clase la ultima sale en otro timezone
+- Poner login cuando añada nuevo curso
 - cambiar el campo de paid al curso 1 (solucionar cuando hay dos cursos en una misma semana) REVISAR PERO CREO QUE TODO OK
 - hacer que las clases automáticamente se pongan como done si no las he tocado 2
 - ver todo tipo de variantes para clases moved 2

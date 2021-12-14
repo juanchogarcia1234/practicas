@@ -17,26 +17,20 @@ export default async function handler(req, res) {
   let courseNumber;
 
   if (req.method === "GET") {
-    console.log("estudiante", student);
-    console.log("curso", parseInt(course));
-    console.log("variables en NODE", process.env);
-
-    //GET USERS
-    courses = await coursesCollection
-      .find({ student: student, number: parseInt(course) })
-      .sort({ number: -1 })
-      .toArray();
-    console.log("courses", courses);
+    if (course) {
+      //Get certain course
+      courses = await coursesCollection
+        .find({ student: student, number: parseInt(course) })
+        .sort({ number: -1 })
+        .toArray();
+      console.log("courses", courses);
+    } else {
+      console.log("curso no especificado");
+      courses = await coursesCollection.find({ student: student }).sort({ number: -1 }).toArray();
+      console.log("courses no especificados", courses);
+    }
   } else if (req.method === "POST") {
-    console.log("hora ACTUAL en NODE", new Date());
-
     let { student, startDate, weekDays, weekHours, numberOfClasses, number } = req.body;
-
-    console.log("recibido en NODE", startDate);
-    console.log("horas a añadir", Number(startDate[21]));
-
-    console.log("recibido en NODE", startDate);
-    console.log("hora startDate en NODE cambiada", zonedTimeToUtc(startDate, "Europe/Riga"));
 
     courses = await coursesCollection.insertOne({ student: student, number: number, start_date: addHours(new Date(startDate), Number(startDate[21])), number_of_weekclasses: numberOfClasses, days: weekDays, hours: weekHours });
   }

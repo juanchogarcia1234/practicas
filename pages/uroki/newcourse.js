@@ -20,6 +20,7 @@ export default function newCourse({ sessionActiva }) {
   //Start date
   const [startDate, setStartDate] = useState("");
   const [isLoading, setLoading] = useState(false);
+  const [isLoadingCourses, setLoadingCourses] = useState(false);
 
   function isClicked(day) {
     return weekDays.includes(day) ? true : false;
@@ -185,10 +186,12 @@ export default function newCourse({ sessionActiva }) {
         })}
         <br />
         <button
-          class="positive ui button big"
+          class={!isLoadingCourses ? "positive ui button big" : "positive ui button big loading"}
           onClick={() => {
+            setLoadingCourses(true);
             //Get last course
             axios.get("/api/courses", { params: { student: chosenUser } }).then(res => {
+              console.log("NUMERO DE CURSOS", res.data.courses.length);
               let courseNumber = res.data.courses.length === 0 ? 1 : res.data.courses[0].number + 1;
               console.log("esto es del browser sin formatear", new Date(startDate));
               console.log("esto es del browser formatISO", formatISO(new Date(startDate)));
@@ -237,6 +240,8 @@ export default function newCourse({ sessionActiva }) {
                         });
                         console.log("clase una por una", nextClassDay);
                       });
+
+                      setLoadingCourses(false);
                     });
 
                   //2 Veo que dia de la semana es la primera clase y lo comparo con el array
