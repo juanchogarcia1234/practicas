@@ -3,7 +3,7 @@ export default async function handler(req, res) {
   if (req.method === "POST") {
     const client = await connectToDatabase();
     const usersCollection = client.db().collection("users");
-    await usersCollection.insertOne({ email: req.body });
+    await usersCollection.insertOne({ email: "juanito" });
     client.close();
   }
 
