@@ -4,7 +4,7 @@ export default async function handler(req, res) {
     console.log("funciona");
     console.log(req);
   }
-  console.log(req);
+  console.log(JSON.stringify(req.body.payload.object));
 
   res.status(200).json({ "hello": "rolw" });
 }
