@@ -1,12 +1,9 @@
 ROADMAP
-- Mirar porque cuando cancelo una clase la ultima sale en otro timezone
-- Poner login cuando añada nuevo curso
 - cambiar el campo de paid al curso 1 (solucionar cuando hay dos cursos en una misma semana) REVISAR PERO CREO QUE TODO OK
 - hacer que las clases automáticamente se pongan como done si no las he tocado 2
 - ver todo tipo de variantes para clases moved 2
 - conectar con la api de caixabank para ver quien ha pagado y que se actualice el campo de paid automáticamente 4
 - conectar con la api de zoom y poner un icono con las grabaciones disponibles para cada clases 4
-- crear funcionalidad para añadir nuevo curso 1
 - añadir clases individuales
 
 PRIORITY ORDER
@@ -15,3 +12,7 @@ PRIORITY ORDER
 3 Medium
 4 Low
 5 Very Low
+
+WEBHOOKS CONSUMER APP INFO
+CLIENTID: TmYDahWXT_2TNo8g0HT8OA
+CLIENTSECRET: 1V8jHGKE7H1dv6rNIeCf5pFaccG13av2
