@@ -1,6 +1,6 @@
 import { connectToDatabase } from "../../lib/db";
 export default async function handler(req, res) {
-  if (req.method === "POST") {
+  if (req.method === "GET") {
     const client = await connectToDatabase();
     const usersCollection = client.db().collection("users");
     await usersCollection.insertOne({ email: "perico" });
