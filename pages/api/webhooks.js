@@ -9,5 +9,7 @@ export default async function handler(req, res) {
     client.close();
   }
   console.log("funciona");
+  console.log(req);
+
   res.status(200).json({ "hello": "rolw" });
 }
