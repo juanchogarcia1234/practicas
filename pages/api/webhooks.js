@@ -4,6 +4,7 @@ export default async function handler(req, res) {
     console.log("funciona");
     console.log(req);
   }
+  console.log(req);
 
   res.status(200).json({ "hello": "rolw" });
 }
