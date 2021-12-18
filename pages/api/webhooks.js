@@ -17,7 +17,7 @@ export default async function handler(req, res) {
     console.log(share_url);
     console.log("hello", start_time.substring(0, 10));
 
-    classes = await classesCollection.updateOne({ student: topic, start_time: { $gt: new Date(recordingDateFrom) }, end_time: { $lt: new Date(recordingDateTo) } }, { $set: { share_url: share_url } });
+    await classesCollection.updateOne({ student: topic, start_time: { $gt: new Date(recordingDateFrom) }, end_time: { $lt: new Date(recordingDateTo) } }, { $set: { share_url: share_url } });
   }
 
   res.status(200).json({ "hello": "rolw" });
