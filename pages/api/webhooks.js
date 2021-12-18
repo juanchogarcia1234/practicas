@@ -10,13 +10,13 @@ export default async function handler(req, res) {
 
     console.log(topic);
     console.log(start_time);
+    console.log("new date", start_time);
     console.log(share_url);
-    console.log("hello");
+    console.log("hello", start_time.substring(0, 10));
     // console.log("new Date", new Date(recording_end.substr(0, 10)).toString());
 
-    classes = await classesCollection.updateOne({ student: topic, start_time: recording_end.substring() }, { $set: { moved: true, start_time: addHours(parseISO(dateToMove), 3), end_time: addHours(parseISO(dateToMove), 4) } });
+    // classes = await classesCollection.updateOne({ student: topic, start_time: start_time.substring(0, 10) }, { $set: { moved: true, start_time: addHours(parseISO(dateToMove), 3), end_time: addHours(parseISO(dateToMove), 4) } });
   }
-  console.log(JSON.stringify(req.body.payload.object));
 
   res.status(200).json({ "hello": "rolw" });
 }
