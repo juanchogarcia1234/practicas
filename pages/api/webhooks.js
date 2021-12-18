@@ -8,14 +8,16 @@ export default async function handler(req, res) {
 
     const { start_time, topic, share_url } = req.body.payload.object;
 
+    const recordingDateFrom = start_time + "T00:00:00.000Z";
+    const recordingDateTo = start_time + "T23:00:00.000Z";
+
     console.log(topic);
     console.log(start_time);
-    console.log("new date", start_time);
+    console.log("new date", start_time + "T00:00:00.000Z");
     console.log(share_url);
     console.log("hello", start_time.substring(0, 10));
-    // console.log("new Date", new Date(recording_end.substr(0, 10)).toString());
 
-    // classes = await classesCollection.updateOne({ student: topic, start_time: start_time.substring(0, 10) }, { $set: { moved: true, start_time: addHours(parseISO(dateToMove), 3), end_time: addHours(parseISO(dateToMove), 4) } });
+    classes = await classesCollection.updateOne({ student: topic, start_time: { $gt: new Date(recordingDateFrom) }, end_time: { $lt: new Date(recordingDateTo) } }, { $set: { share_url: share_url } });
   }
 
   res.status(200).json({ "hello": "rolw" });
