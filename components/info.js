@@ -40,7 +40,7 @@ const Info = () => {
           <i className="play circle icon blue"></i>с записью
         </div>
         <div>
-          <i className="ruble sign icon grey"></i>без записи
+          <i className="play circle icon grey"></i>без записи
         </div>
       </div>
     </div>
