@@ -256,6 +256,7 @@ class Calendar extends React.Component {
             <a href={urok.share_url ? urok.share_url : "#"} target="_blank">
               <i className={`play circle icon ${urok.share_url ? "blue" : "grey"}`}></i>
             </a>
+            <a href="https://google.com">click</a>
           </div>
         </div>
       </div>
@@ -298,7 +299,7 @@ class Calendar extends React.Component {
   }
 
   clickEventListener(e) {
-    event.preventDefault();
+    // event.preventDefault();
     if (!e.target.classList.contains("compact") && !e.target.classList.contains("threePoints")) {
       var list = document.getElementsByClassName("compact");
       for (let item of list) {
