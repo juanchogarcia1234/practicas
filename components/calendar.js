@@ -247,7 +247,7 @@ class Calendar extends React.Component {
           <div style={{ marginBottom: "-3px", marginTop: "3px", fontSize: "12px" }}>
             {urok.student_name} {urok.number}/8
           </div>
-          <div className="icons" style={{ fontSize: "11px" }}>
+          <div className="icons botones">
             <i className={`check icon ${urok.done ? "green" : "grey"}`}></i>
             <i className={`share icon ${urok.moved ? "blue" : "grey"}`}></i>
             <i className={`times close icon ${urok.cancelled ? "red" : "grey"}`}></i>
