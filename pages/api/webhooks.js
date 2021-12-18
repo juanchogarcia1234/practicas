@@ -5,8 +5,8 @@ export default async function handler(req, res) {
     //Hacer un put a la clase con el nombre del alumno ("topic":"Clase con Alexandr") y la fecha ("recording_end":"2021-12-16T18:33:44Z") y añadir "share_url"
     const client = await connectToDatabase();
     const classesCollection = client.db().collection("classes");
-    const myObject = JSON.parse(req.body);
-    console.log(myObject);
+
+    console.log(req.body);
 
     console.log(recording_end);
     console.log("hello");
