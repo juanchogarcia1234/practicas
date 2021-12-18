@@ -252,7 +252,7 @@ class Calendar extends React.Component {
             <i className={`share icon ${urok.moved ? "blue" : "grey"}`}></i>
             <i className={`times close icon ${urok.cancelled ? "red" : "grey"}`}></i>
             <i className={`ruble sign icon ${pagado ? "yellow" : "grey"}`}></i>
-            <i className={`times close icon ${urok.share_url ? "red" : "grey"}`}></i>
+            <i className={`play circle icon ${urok.share_url ? "blue" : "grey"}`}></i>
           </div>
         </div>
       </div>
