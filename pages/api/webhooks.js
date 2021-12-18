@@ -7,6 +7,7 @@ export default async function handler(req, res) {
     const classesCollection = client.db().collection("classes");
     const { topic, recording_end, share_url } = req.body.payload.object;
 
+    console.log(recording_end);
     console.log("new Date", new Date(recording_end.substr(0, 10)).toString());
 
     classes = await classesCollection.updateOne({ student: topic, start_time: recording_end.substring() }, { $set: { moved: true, start_time: addHours(parseISO(dateToMove), 3), end_time: addHours(parseISO(dateToMove), 4) } });
