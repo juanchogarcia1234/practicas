@@ -256,7 +256,6 @@ class Calendar extends React.Component {
             <a href={urok.share_url ? urok.share_url : "#"} target="_blank">
               <i className={`play circle icon ${urok.share_url ? "blue" : "grey"}`}></i>
             </a>
-            <a href="https://google.com">click</a>
           </div>
         </div>
       </div>
