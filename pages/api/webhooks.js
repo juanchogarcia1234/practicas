@@ -8,8 +8,8 @@ export default async function handler(req, res) {
 
     const { start_time, topic, share_url } = req.body.payload.object;
 
-    const recordingDateFrom = start_time + "T00:00:00.000Z";
-    const recordingDateTo = start_time + "T23:00:00.000Z";
+    const recordingDateFrom = start_time.substring(0, 10) + "T00:00:00.000Z";
+    const recordingDateTo = start_time.substring(0, 10) + "T23:00:00.000Z";
 
     console.log(topic);
     console.log(start_time);
