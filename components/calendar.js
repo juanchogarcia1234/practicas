@@ -9,6 +9,7 @@ import Info from "./info";
 import { months, hours, currentTimePositions } from "../constants";
 import Spinner from "./spinner";
 import styles from "./menu.module.css";
+import estilos from "./calendar.module.css";
 
 class Calendar extends React.Component {
   state = {
@@ -247,7 +248,7 @@ class Calendar extends React.Component {
           <div style={{ marginBottom: "-3px", marginTop: "3px", fontSize: "12px" }}>
             {urok.student_name} {urok.number}/8
           </div>
-          <div className="icons botones">
+          <div className={`icons ${estilos.botones}`}>
             <i className={`check icon ${urok.done ? "green" : "grey"}`}></i>
             <i className={`share icon ${urok.moved ? "blue" : "grey"}`}></i>
             <i className={`times close icon ${urok.cancelled ? "red" : "grey"}`}></i>

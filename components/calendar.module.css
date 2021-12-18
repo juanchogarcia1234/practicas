@@ -4,11 +4,11 @@
 }
 
 .botones {
-  font-size: 11px;
+  font-size: 8px;
 }
 
-@media screen and (max-width: 1402px) {
+@media screen and (min-width: 1402px) {
   .botones {
-    font-size: 8px;
+    font-size: 11px;
   }
 }
