@@ -6,9 +6,11 @@ export default async function handler(req, res) {
     const client = await connectToDatabase();
     const classesCollection = client.db().collection("classes");
 
-    console.log(req.body);
+    const { start_time, topic, share_url } = req.body.payload.object;
 
-    console.log(recording_end);
+    console.log(topic);
+    console.log(start_time);
+    console.log(share_url);
     console.log("hello");
     // console.log("new Date", new Date(recording_end.substr(0, 10)).toString());
 
