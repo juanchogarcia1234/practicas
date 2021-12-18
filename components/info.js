@@ -35,6 +35,14 @@ const Info = () => {
           <i className="ruble sign icon grey"></i>не оплачен
         </div>
       </div>
+      <div className="info-classes-divider">
+        <div>
+          <i className="play circle icon blue"></i>с записью
+        </div>
+        <div>
+          <i className="ruble sign icon grey"></i>без записи
+        </div>
+      </div>
     </div>
   );
 };
