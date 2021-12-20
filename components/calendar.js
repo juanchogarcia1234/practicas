@@ -276,6 +276,23 @@ class Calendar extends React.Component {
         }
       })
       .then(response => {
+        const timeZoneDifference = new Date().getTimezoneOffset() / 60 + 2;
+        let newTime;
+        let finalTime;
+        let newTimeEnd;
+        let finalTimeEnd;
+        const newArray = response.data.classes.forEach(x => {
+          let diferencia = timeZoneDifference > 0 ? -Math.abs(timeZoneDifference) : Math.abs(timeZoneDifference);
+          newTime = Number(x.start_time.substr(11, 2)) + diferencia;
+          newTime = newTime.toString();
+          finalTime = x.start_time.substr(0, 11) + newTime + x.start_time.substr(13);
+          x.start_time = finalTime;
+          newTimeEnd = Number(x.end_time.substr(11, 2)) + diferencia;
+          newTimeEnd = newTimeEnd.toString();
+          finalTimeEnd = x.end_time.substr(0, 11) + newTimeEnd + x.end_time.substr(13);
+          x.end_time = finalTimeEnd;
+        });
+        console.log(response.data.classes);
         this.setState({ classes: response.data.classes }, () => {
           let alumnos = this.state.classes.map(classItem => {
             return { alumno: classItem.student, curso: classItem.course };
