@@ -10,12 +10,12 @@ async function main() {
     await client.connect();
 
     // //Course collection
-    // const coursesCollection = await client.db().collection("courses");
-    // await coursesCollection.deleteOne({ number: 2, student: "Alexandr" });
+    const coursesCollection = await client.db().collection("courses");
+    await coursesCollection.deleteOne({ number: 2, student: "Alexandr" });
 
     //Clases collection
-    const classesCollection = await client.db().collection("classes");
-    await classesCollection.deleteMany({ student: "elmira" });
+    // const classesCollection = await client.db().collection("classes");
+    // await classesCollection.deleteMany({ student: "Alexandr", course: 2 });
   } catch (e) {
     console.error(e);
   } finally {

@@ -3,7 +3,6 @@ ROADMAP
 - hacer que las clases automáticamente se pongan como done si no las he tocado 2
 - ver todo tipo de variantes para clases moved 2
 - conectar con la api de caixabank para ver quien ha pagado y que se actualice el campo de paid automáticamente 4
-- conectar con la api de zoom y poner un icono con las grabaciones disponibles para cada clases 4
 - añadir clases individuales
 
 PRIORITY ORDER

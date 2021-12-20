@@ -73,7 +73,7 @@ export default async function handler(req, res) {
       //1 cambiar fecha
       //2 cambiar estado a moved
       //3
-      classes = await classesCollection.updateOne({ _id: good_id }, { $set: { moved: true, start_time: addHours(parseISO(dateToMove), 3), end_time: addHours(parseISO(dateToMove), 4) } });
+      classes = await classesCollection.updateOne({ _id: good_id }, { $set: { moved: true, start_time: addHours(parseISO(dateToMove), 2), end_time: addHours(parseISO(dateToMove), 4) } });
 
       console.log("dateToMOve");
       console.log("dateToMOve", addHours(parseISO(dateToMove), 4));
