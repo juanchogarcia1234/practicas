@@ -276,6 +276,7 @@ class Calendar extends React.Component {
         }
       })
       .then(response => {
+        console.log("resultado final", response.data)
         const timeZoneDifference = new Date().getTimezoneOffset() / 60 + 2;
         let newTime;
         let finalTime;
