@@ -98,7 +98,7 @@ class Calendar extends React.Component {
     return this.state.currentWeek.map(date => {
       return (
         <th className={format(date, "E d y") === format(this.state.currentDay, "E d y") ? "current" : ""} style={{ width: "164px" }} id={format(date, "E d y")} key={format(date, "E d y")}>
-          {capitalize(format(date, "E d ", { locale: ru }))}
+          {capitalize(format(date, "EEEEEE d ", { locale: ru }))}
         </th>
       );
     });
@@ -276,7 +276,7 @@ class Calendar extends React.Component {
         }
       })
       .then(response => {
-        console.log("resultado final", response.data)
+        console.log("resultado final", response.data);
         const timeZoneDifference = new Date().getTimezoneOffset() / 60 + 2;
         let newTime;
         let finalTime;
