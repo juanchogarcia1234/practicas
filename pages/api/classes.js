@@ -56,7 +56,7 @@ export default async function handler(req, res) {
       let newClassTime = classHours[classDays.indexOf(dayOfTheNewClass)];
       console.log("newClassTime", newClassTime);
 
-      let startHour = parseInt(newClassTime.split(":")[0]) + 2;
+      let startHour = parseInt(newClassTime.split(":")[0]);
       console.log("startHour", startHour);
       let startMinutes = parseInt(newClassTime.split(":")[1]);
 
