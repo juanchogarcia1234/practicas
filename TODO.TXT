@@ -5,6 +5,7 @@ ROADMAP
 - conectar con la api de caixabank para ver quien ha pagado y que se actualice el campo de paid automáticamente 4
 - añadir clases individuales
 - ver que problema hay al cargar las clases de las 9 o 8am
+- Añadir opcion de ¿pagado? a la hora de crear el curso
 
 PRIORITY ORDER
 1 Very high
