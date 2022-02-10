@@ -340,7 +340,7 @@ class Calendar extends React.Component {
   }
 
   render() {
-    console.log("esta es la variable", process.env.NEXT_PUBLIC_TZ);
+    console.log("esta es la varable", process.env.NEXT_PUBLIC_TZ);
     console.log("hora ACTUAL", new Date());
     return (
       <>
